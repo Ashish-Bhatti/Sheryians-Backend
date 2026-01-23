@@ -15,3 +15,17 @@
 
 - npm is a package manager for installing, managing, and publishing packages,
 - npx is a package runner used for executing Node.js packages and their binaries directly without permanently installing them
+
+------------------------------------
+- deploy on github
+ - git init
+ - git add .
+ - git commit -m 'first commit'
+ - git ---------
+ - git push -u origin main'
+
+- deploy on render
+ - build command - npm i
+ - start command - node server.js
+
+url - https://servertest-6ue6.onrender.com/

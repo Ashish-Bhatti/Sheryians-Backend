@@ -17,5 +17,5 @@ app.get('/notes',(req,res)=>{ // get method api
 })
 
 app.listen(3000,()=>{
-    console.log('server on') // just a callback function to log 'server on'
+    console.log('server is running') // just a callback function to log 'server on'
 })

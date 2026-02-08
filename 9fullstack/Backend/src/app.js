@@ -63,7 +63,7 @@ app.patch('/api/notes/:id', async (req, res) => {
  */
 app.get('*name',(req,res)=>{
     res.sendFile(path.join(__dirname,'./public/index.html'))
-    console.log('this is wild card route')
+    // console.log('this is wild card route')
 })
 
 module.exports = app;

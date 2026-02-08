@@ -5,7 +5,7 @@ const App = () => {
     const [notes, setNotes] = useState([]);
 
     function getNotes() {
-        axios.get('http://localhost:3000/api/notes').then((res) => {
+        axios.get('https://sheryians-backend-vbty.onrender.com/api/notes').then((res) => {
             console.log(res.data.notes);
             setNotes(res.data.notes);
         });
@@ -20,7 +20,7 @@ const App = () => {
 
         console.log(title.value, description.value);
 
-        axios.post('http://localhost:3000/api/notes', { title: title.value, description: description.value }).then((res) => {
+        axios.post('https://sheryians-backend-vbty.onrender.com/api/notes', { title: title.value, description: description.value }).then((res) => {
             console.log(res.data);
             getNotes();
         });
@@ -28,7 +28,7 @@ const App = () => {
     }
 
     function handleDelete(id) {
-      axios.delete(`http://localhost:3000/api/notes/${id}`).then((res) => {
+      axios.delete(`https://sheryians-backend-vbty.onrender.com/api/notes/${id}`).then((res) => {
         console.log(res.data);
         getNotes();
       });

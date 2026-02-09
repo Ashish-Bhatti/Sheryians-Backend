@@ -16,19 +16,20 @@ app.use(express.json());
 // it will serve the static files from public folder to the browser
 // which means if we have any file in public folder than we can access it by calling localhost:5000/filename
 // and if we change the path to './src' than we can access the files in src folder by calling localhost:5000/filename
-app.use(express.static('./public'))
+app.use(express.static('./public'));
 
 // app.get('/', (req, res) => {
 //     res.send('hello there');
 // });
 
 app.post('/api/notes', async (req, res) => {
-    const { title, description } = req.body;
-    await noteModel.create({ title, description });
+    const { title, description, image } = req.body;
+    await noteModel.create({ title, description, image });
     res.status(201).json({
         msg: 'note created',
         title,
         description,
+        image,
     });
 });
 
@@ -61,9 +62,9 @@ app.patch('/api/notes/:id', async (req, res) => {
 //** wild card route - if we call an api which we didn't create than it will run
 //** __dirname - it will automatic gives the path from root directory to current file
  */
-app.get('*name',(req,res)=>{
-    res.sendFile(path.join(__dirname,'./public/index.html'))
+app.get('*name', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
     // console.log('this is wild card route')
-})
+});
 
 module.exports = app;

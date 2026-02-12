@@ -18,6 +18,7 @@ authRouter.post('/register', async (req, res) => {
 
     const user = await userModel.create({ name, email, password });
 
+    // create token
     const token = jwt.sign(
         {
             id: user._id,
@@ -25,6 +26,8 @@ authRouter.post('/register', async (req, res) => {
         },
         process.env.JWT_SECRET
     );
+
+    
 
     res.cookie('jwt_token', token);
 

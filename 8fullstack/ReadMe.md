@@ -3,4 +3,4 @@
 - in app file we require it and use it
     const cors = require('cors)
     app.use(cors())
-- no we can access backend data from frontend 
+- now we can access backend data from frontend 

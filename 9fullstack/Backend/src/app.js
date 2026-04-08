@@ -54,7 +54,16 @@ app.patch('/api/notes/:id', async (req, res) => {
     const id = req.params.id;
     await noteModel.findByIdAndUpdate(id, { description });
     res.status(201).json({
-        msg: 'successfullu update',
+        msg: 'successfully updated',
+    });
+});
+
+app.put('/api/notes/:id', async (req, res) => {
+    const { title, description } = req.body;
+    const id = req.params.id;
+    await noteModel.findByIdAndUpdate(id, { title, description });
+    res.status(201).json({
+        msg: 'successfully updated all',
     });
 });
 

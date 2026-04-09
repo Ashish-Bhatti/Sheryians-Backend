@@ -9,7 +9,7 @@ authRouter.post('/register', async (req, res) => {
 
     const checkUser = await userModel.findOne({ email });
 
-    findOne() → returns document or null
+    // findOne() → returns document or null
     if (checkUser) {
         return res.status(409).json({
             message: 'user already exists with this email id',
@@ -74,7 +74,7 @@ authRouter.post('/login', async (req, res) => {
         process.env.JWT_SECRET
     );
 
-    res.cookie('jwt_toekn', token);
+    res.cookie('jwt_token', token);
 
     res.status(200).json({
         msg: 'user logged in successfully',

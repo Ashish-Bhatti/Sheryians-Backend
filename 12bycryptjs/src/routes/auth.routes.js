@@ -8,7 +8,8 @@ authRouter.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
     const checkUser = await userModel.findOne({ email });
- 
+
+    findOne() → returns document or null
     if (checkUser) {
         return res.status(409).json({
             message: 'user already exists with this email id',
@@ -51,6 +52,7 @@ authRouter.post('/login', async (req, res) => {
 
     const user = await userModel.findOne({ email });
 
+    // findOne() → returns document or null
     if (!user) {
         return res.status(404).json({
             msg: 'user not found with this email id',

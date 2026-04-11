@@ -53,7 +53,7 @@ async function loginController (req, res){
 
     if (!checkPassword) {
         return res.status(401).json({
-            msg: 'wrong credentials',
+            msg: 'wrong password or credentials',
         });
     }
 

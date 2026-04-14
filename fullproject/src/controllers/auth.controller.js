@@ -2,7 +2,7 @@ const userModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-async function registerController (req, res) {
+async function registerController(req, res) {
     const { email, userName, password, bio, profileImage } = req.body;
 
     const isUserAlreadyExists = await userModel.findOne({
@@ -19,7 +19,7 @@ async function registerController (req, res) {
 
     const user = await userModel.create({ email, userName, password: hashPassword, bio, profileImage });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign({ id: user._id, username: user.userName }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
     res.cookie('token', token);
 
@@ -35,7 +35,7 @@ async function registerController (req, res) {
     });
 }
 
-async function loginController (req, res){
+async function loginController(req, res) {
     const { userName, email, password } = req.body;
 
     const checkUser = await userModel.findOne({
@@ -60,6 +60,7 @@ async function loginController (req, res){
     const token = jwt.sign(
         {
             id: checkUser._id,
+            username: checkUser.userName,
         },
         process.env.JWT_SECRET,
         { expiresIn: '1d' }
@@ -74,5 +75,5 @@ async function loginController (req, res){
 
 module.exports = {
     registerController,
-    loginController
-}
+    loginController,
+};

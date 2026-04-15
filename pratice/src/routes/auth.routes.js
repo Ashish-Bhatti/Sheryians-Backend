@@ -1,47 +1,48 @@
 const express = require('express');
 const authRouter = express.Router();
-const userModel = require('../models/user.models');
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs');
+
+const authController = require('../controllers/auth.controller');
 
 
-authRouter.post('register', async (req, res) => {
-    const { email, userName, password, bio, profileImage } = req.body;
+/**
+ * @route   POST /api/auth/register
+ * @desc    Register a new user
+ * @access  Public
+ *
+ * @body    {
+ *   username: String,
+ *   email: String,
+ *   password: String
+ * }
+ *
+ * @flow
+ * - Receives user data from client
+ * - Calls registerController to:
+ *    → validate input
+ *    → hash password
+ *    → create user in database
+ */
+authRouter.post('/register', authController.registerController);
 
-    const isUserAlreadyExists = await userModel.findOne({
-        $or: [{ email }, { userName }],
-    });
 
-    if (isUserAlreadyExists) {
-        return res.status(409).json({
-            message: 'user already exist',
-        });
-    }
+/**
+ * @route   POST /api/auth/login
+ * @desc    Authenticate user and log them in
+ * @access  Public
+ *
+ * @body    {
+ *   email: String,
+ *   password: String
+ * }
+ *
+ * @flow
+ * - Receives login credentials
+ * - Calls loginController to:
+ *    → verify email & password
+ *    → generate JWT token
+ *    → send token (usually via cookies or response)
+ */
+authRouter.post('/login', authController.loginController);
 
-    const hashPassword = bcrypt.hash(password, 10);
-
-    const user = await userModel.create({ email, userName, password: hashPassword, bio, profileImage });
-
-    const token = jwt.sign(
-        {
-            id: user._id,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: '1d' }
-    );
-
-    res.cookie('token', token);
-
-    res.status(201).json({
-        msg: 'register successfully',
-        user: {
-            id: user._id,
-            email: user.email,
-            userName: user.userName,
-            bio: user.bio,
-            profileImage: user.profileImage,
-        },
-    });
-});
 
 module.exports = authRouter;

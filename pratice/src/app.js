@@ -1,15 +1,20 @@
 const express = require('express');
-const authRouter = require('../src/routes/auth.routes');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-app.use(express.json());
+app.use(express.json()); // middleware to read json data from req.body
+app.use(cookieParser()); // to use cookies
 
+// require routes
+const authRouter = require('./routes/auth.routes');
+const postRouter = require('./routes/post.routes');
+const followRouter = require('./routes/follow.routes');
+const likeRouter = require('./routes/like.routes');
+
+// using routes
 app.use('/api/auth', authRouter);
-app.use(cookieParser())
-
-app.get('/', (req, res) => {
-    res.send('hello there');
-});
+app.use('/api/posts', postRouter);
+app.use('/api/follow', followRouter);
+app.use('/api/like', likeRouter);
 
 module.exports = app;

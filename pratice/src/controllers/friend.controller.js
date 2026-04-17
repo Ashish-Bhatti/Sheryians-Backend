@@ -89,6 +89,12 @@ async function sendFriendRequestController(req, res) {
     });
 }
 
+/**
+ * @controller  acceptFriendRequest
+ * @route       POST /api/friend/accept/:requestId
+ * @desc        Accept a friend request
+ * @access      Protected
+ */
 async function acceptFriendRequestController(req, res) {
     const user = req.user.username;
     const requestId = req.params.requestId;
@@ -124,6 +130,13 @@ async function acceptFriendRequestController(req, res) {
     });
 }
 
+
+/**
+ * @controller  rejectFriendRequest
+ * @route       POST /api/friend/reject/:requestId
+ * @desc        Reject a friend request
+ * @access      Protected
+ */
 async function rejectFriendRequestController(req, res) {
     const user = req.user.username;
     const requestId = req.params.requestId;
@@ -153,6 +166,13 @@ async function rejectFriendRequestController(req, res) {
     });
 }
 
+
+/**
+ * @controller  unfriendController
+ * @route       POST /api/friend/unfriend/:userId
+ * @desc        Remove a friend
+ * @access      Protected
+ */
 async function unfriendController(req, res) {
     const user = req.user.username;
     const friendUsername = req.params.userId;

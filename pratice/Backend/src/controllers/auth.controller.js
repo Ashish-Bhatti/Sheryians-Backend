@@ -62,7 +62,7 @@ async function registerController(req, res) {
         user: {
             id: user._id,
             email: user.email,
-            userName: user.userName,
+            username: user.username,
             bio: user.bio,
             profileImage: user.profileImage,
         },

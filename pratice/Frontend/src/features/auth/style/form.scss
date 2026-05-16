@@ -1,0 +1,42 @@
+.form-container {
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        input {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            border: none;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #007bff;
+        }
+
+        button {
+            padding: 0.5rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transition: background-color 0.3s ease;
+        }
+    }
+
+    .toogleAuthForm {
+        color: #00c8ff;
+    }
+}

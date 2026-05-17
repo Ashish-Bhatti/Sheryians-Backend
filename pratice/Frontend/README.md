@@ -19,3 +19,17 @@ axios.post('http://localhost:3000/api/auth/login', {  username, password },
     .then((res) => console.log(res.data));
 
 => { withCredentials:true } --> we use it so we can set cookies in frontend without it browser don't store the cookies
+
+
+
+
+
+
+
+-- folder structure
+  src
+  --features
+    --auth
+      --pages    // here  we create login / register page UI
+      --services // all the auth related api call request comes here
+      --style

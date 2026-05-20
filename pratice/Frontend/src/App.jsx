@@ -1,11 +1,14 @@
 import React from 'react';
 import './style.scss';
 import AppRoutes from './AppRoutes';
+import AuthProvider from './features/auth/AuthContext';
 
 const App = () => {
     return (
         <>
-            <AppRoutes />
+            <AuthProvider>
+                <AppRoutes />
+            </AuthProvider>
         </>
     );
 };

@@ -33,3 +33,25 @@ axios.post('http://localhost:3000/api/auth/login', {  username, password },
       --pages    // here  we create login / register page UI
       --services // all the auth related api call request comes here
       --style
+      --hooks   // here we create custom hooks
+      --AuthContext.jsx // here we create useContext
+
+
+------------------ Frontend Architecture – 4-Layer Model (React) -------------------------------
+=> UI
+  -> UI dikhana user ko or navigate krna
+
+=> Hook
+  -> manage krna state and api layer ko
+
+=> State
+  -> state mangae krna
+    -> loading
+    -> user
+    -> post list
+    -> error
+
+=> Api
+  -> Backened se communicate krna
+
+

@@ -1,33 +1,30 @@
 import React from 'react';
 import '../style/form.scss';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
+import useAuth from '../hooks/useAuth';
 
 const Register = () => {
+    const navigate = useNavigate();
+
+    const {loading, handleRegister} = useAuth()
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    async function handleSubmit(e) {
-        e.preventDefault();
+    const handleSubmit = async(e) =>{
+        e.preventDefault()
+        const res = await handleRegister(username,email,password)
+        console.log(res)
+        navigate('/')
 
-        axios
-            .post(
-                'http://localhost:3000/api/auth/register',
-                {
-                    username,
-                    email,
-                    password,
-                },
-                {
-                    withCredentials: true,
-                } // we need to set cookies in the frontend to send them to the backend, and for that we need to set this withCredentials flag to true
-            )
-            .then((res) => {
-                console.log(res.data);
-            });
     }
+
+    if(loading){
+        return <p>Loading...</p>
+    }
+
 
     return (
         <main>
@@ -50,5 +47,4 @@ const Register = () => {
         </main>
     );
 };
-
 export default Register;

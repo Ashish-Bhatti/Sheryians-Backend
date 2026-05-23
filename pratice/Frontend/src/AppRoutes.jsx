@@ -6,6 +6,7 @@ import Register from './features/auth/pages/Register';
 const AppRoutes = () => {
     return (
         <Routes>
+            <Route path="/" element={<h1>Home Page</h1>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
         </Routes>

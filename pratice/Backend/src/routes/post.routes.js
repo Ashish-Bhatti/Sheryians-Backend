@@ -12,7 +12,6 @@ const upload = multer({ storage: storage });
 // Middleware to authenticate and identify the user (JWT-based)
 const identifyUser = require('../middlewares/auth.middleware');
 
-
 /**
  * @route   POST /api/posts/create
  * @desc    Create a new post
@@ -25,13 +24,7 @@ const identifyUser = require('../middlewares/auth.middleware');
  * - Image is stored in memory (not saved to disk here)
  * - identifyUser middleware attaches user info to request
  */
-postRouter.post(
-  '/create',
-  upload.single('image'),
-  identifyUser,
-  postController.createPostController
-);
-
+postRouter.post('/create', upload.single('image'), identifyUser, postController.createPostController);
 
 /**
  * @route   GET /api/posts/getPost
@@ -42,12 +35,7 @@ postRouter.post(
  * - Requires valid JWT token
  * - identifyUser ensures user is authenticated
  */
-postRouter.get(
-  '/getPost',
-  identifyUser,
-  postController.getPostsController
-);
-
+postRouter.get('/getPost', identifyUser, postController.getPostsController);
 
 /**
  * @route   GET /api/posts/details/:postId
@@ -60,11 +48,18 @@ postRouter.get(
  * - Returns detailed information about the post
  * - Also verifies whether the post belongs to the requesting user
  */
-postRouter.get(
-  '/details/:postId',
-  identifyUser,
-  postController.getPostDetailsController
-);
+postRouter.get('/details/:postId', identifyUser, postController.getPostDetailsController);
 
+/**
+ * @route   GET /api/posts/feed
+ * @desc    Get all the post created in the DB
+ * @access  Private
+ *
+ * @notes
+ * - Returns all the posts stored in the database
+ * - Useful for displaying a global feed of posts, regardless of the author
+ */
+
+postRouter.get('/feed', identifyUser, postController.getFeedController);
 
 module.exports = postRouter;

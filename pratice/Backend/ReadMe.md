@@ -1,3 +1,6 @@
+// new mongoDB method
+populate('user') -  to get user details along with the post data
+lean() - it convert mongooseObject to normal object
 
 # Backend API Project
 

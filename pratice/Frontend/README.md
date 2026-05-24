@@ -41,17 +41,25 @@ axios.post('http://localhost:3000/api/auth/login', {  username, password },
 => UI
   -> UI dikhana user ko or navigate krna
 
+  -> 1st step
+
 => Hook
   -> manage krna state and api layer ko
 
+  -> 4th step - connect to UI (1st step) - it manage/handle both state and api layer
+
 => State
-  -> state mangae krna
+  -> state mangae krna - state management in Context
     -> loading
     -> user
     -> post list
     -> error
 
+    -> 3rd step - connect to Hook (4th step)
+
 => Api
   -> Backened se communicate krna
+
+  -> 2nd step - connect to Hook (4th step)
 
 

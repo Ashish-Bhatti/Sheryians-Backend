@@ -1,42 +1,39 @@
-.form-container {
-    height: 100vh;
+@use '../../shared/global.scss';
 
+
+@mixin flex-column($gap: 0rem) {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: $gap;
+}
+
+
+main {
+    min-height: 100vh;
+    width: 100%;
+
+    display: flex;
     justify-content: center;
-    gap: 1rem;
+    align-items: center;
+
+    .form-container {
+        @include flex-column(1rem);
+
+        min-width: 350px;
+    }
+
     form {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        input {
-            padding: 0.5rem;
-            font-size: 1rem;
-            border-radius: 0.5rem;
+        @include flex-column(1rem);
+
+
+        input{
             border: none;
-        }
-        input:focus {
             outline: none;
-            box-shadow: 0 0 0 2px #007bff;
+            padding-inline: 1rem;
+            padding-block: 0.5rem;
+            border-radius: 1rem;
         }
 
-        button {
-            padding: 0.5rem;
-            font-size: 1rem;
-            border-radius: 0.5rem;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-            transition: background-color 0.3s ease;
-        }
     }
 
-    .toogleAuthForm {
-        color: #00c8ff;
-    }
 }

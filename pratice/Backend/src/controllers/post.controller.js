@@ -1,4 +1,5 @@
 const postModel = require('../models/post.model');
+const likeModel = require('../models/like.model');
 
 const ImageKit = require('@imagekit/nodejs');
 const { toFile } = require('@imagekit/nodejs');
@@ -11,7 +12,6 @@ const { toFile } = require('@imagekit/nodejs');
 const client = new ImageKit({
     privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
 });
-
 
 /**
  * @controller  createPostController
@@ -26,7 +26,6 @@ const client = new ImageKit({
  * 4. Store post data in MongoDB (caption, image URL, user ID)
  */
 async function createPostController(req, res) {
-
     // Upload image to ImageKit
     const file = await client.files.upload({
         file: await toFile(Buffer.from(req.file.buffer), 'file'), // convert buffer → file
@@ -48,7 +47,6 @@ async function createPostController(req, res) {
     });
 }
 
-
 /**
  * @controller  getPostsController
  * @route       GET /api/posts/getPost
@@ -61,7 +59,6 @@ async function createPostController(req, res) {
  * 3. Return list of posts
  */
 async function getPostsController(req, res) {
-
     const userId = req.user.id;
 
     // Find all posts belonging to the logged-in user
@@ -72,7 +69,6 @@ async function getPostsController(req, res) {
         posts,
     });
 }
-
 
 /**
  * @controller  getPostDetailsController
@@ -88,7 +84,6 @@ async function getPostsController(req, res) {
  * 5. Return post details if authorized
  */
 async function getPostDetailsController(req, res) {
-
     const userId = req.user.id;
     const postId = req.params.postId;
 
@@ -118,9 +113,38 @@ async function getPostDetailsController(req, res) {
     });
 }
 
+/**
+ * @controller  getFeedController
+ * @route       GET /api/posts/feed
+ * @desc        Fetch the feed of posts
+ * @access      Protected
+ */
+async function getFeedController(req, res) {
+    const posts = await Promise.all(
+        (await postModel.find({}).populate('user').lean()).map(async (post) => {
+            const isLiked = await likeModel.findOne({
+                user: req.user.username,
+                post: post._id,
+            });
+
+            post.isLiked = Boolean(isLiked);
+
+            return post;
+        })
+    );
+    // lean() : to get plain javascript objects instead of mongoose documents, it will remove all the mongoose specific properties and methods from the post data and return only the data that we have stored in the database
+    // populate : to get user details along with the post data
+    // it will return all the posts created in the database without any filter as it is a feed and we want to show all the posts to the user
+
+    return res.status(200).json({
+        message: 'feed posts fetched successfully',
+        posts,
+    });
+}
 
 module.exports = {
     createPostController,
     getPostsController,
     getPostDetailsController,
+    getFeedController,
 };

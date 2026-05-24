@@ -43,6 +43,7 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'password is required'],
+        select: false, // exclude password from query results by default , it means when we fetch user data from database it will not include the password field by default for security reasons
     },
 
     /**

@@ -89,7 +89,7 @@ async function loginController(req, res) {
     // Find user by email OR username
     const checkUser = await userModel.findOne({
         $or: [{ email }, { username }],
-    });
+    }).select('+password'); // explicitly include password field for authentication
 
     // If user not found
     if (!checkUser) {

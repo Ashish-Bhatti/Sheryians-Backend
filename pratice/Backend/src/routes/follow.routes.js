@@ -34,4 +34,25 @@ followRouter.post('/:username', identifyUser, followController.followUserControl
  */
 followRouter.delete('/:username', identifyUser, followController.unfollowUserController);
 
+
+/**
+ * @route   Get /api/followingList/
+ * @desc    Get list of users that a user is following
+ * @access  Protected
+ *
+ * @params  username - username of the user
+ */
+followRouter.get('/followingList', identifyUser, followController.getFollowingListController);
+
+/**
+ * @route   Get /api/followerList/
+ * @desc    Get list of users that are following a user
+ * @access  Protected
+ *
+ * @params  username - username of the user
+ */
+
+followRouter.get('/followerList', identifyUser,followController.getFollowerListController)
+
+
 module.exports = followRouter;

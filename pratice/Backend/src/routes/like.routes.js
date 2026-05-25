@@ -20,6 +20,7 @@ const likeRouter = express.Router();
  *    → check if already liked
  *    → create like record if not
  */
-likeRouter.post('/:postId', identifyUser, likeController.likePostController);
+likeRouter.post('/like/:postId', identifyUser, likeController.likePostController);
+likeRouter.post('/unlike/:postId', identifyUser, likeController.unLikePostController);
 
 module.exports = likeRouter;

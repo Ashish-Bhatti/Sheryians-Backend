@@ -99,7 +99,81 @@ async function unfollowUserController(req, res) {
     });
 }
 
+/**
+ * @controller  getFollowingListController
+ * @route       GET /api/followingList
+ * @desc        Get list of users that a user is following
+ * @access      Protected
+
+ */
+async function getFollowingListController(req, res) {
+    const username = req.user.username; // get username from token (auth middleware)
+
+    // check if user exists
+    const userExists = await userModel.findOne({ username });
+
+    if (!userExists) {
+        return res.status(404).json({
+            message: 'user not found',
+        });
+    }
+
+    // get following
+    const follow = await followModel.find({ follower: req.user.username });
+
+    // extract followee usernames
+    const following = await Promise.all(
+        follow.map(async (f) => {
+            const user = await userModel.findOne({ username: f.followee }).select('username profileImage');
+            return user;
+        })
+    );
+
+    return res.status(200).json({
+        message: 'following list fetched successfully',
+        following,
+    });
+}
+
+/**
+ * @controller  getFollowerListController
+ * @route       GET /api/followerList
+ * @desc        Get list of users that are following a user
+ * @access      Protected
+
+ */
+async function getFollowerListController(req,res){
+    const username = req.user.username; // get username from token (auth middleware)
+
+    //check if user exists
+     const userExists = await userModel.findOne({ username });
+
+    if (!userExists) {
+        return res.status(404).json({
+            message: 'user not found',
+        });
+    }
+
+    // get followers
+    const follow = await followModel.find({followee:username})
+
+    // extract follower usernames
+    const followers = await Promise.all(
+        follow.map(async(f)=>{
+            const user = await userModel.findOne({username:f.follower}).select('username profileImage')
+            return user;
+        })
+    )
+
+    return res.status(200).json({
+        message: 'follower list fetched successfully',
+        followers,
+    })
+}
+
 module.exports = {
     followUserController,
     unfollowUserController,
+    getFollowingListController,
+    getFollowerListController
 };

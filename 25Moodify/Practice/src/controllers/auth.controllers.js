@@ -1,6 +1,7 @@
 const userModel = require('../models/user.model');
 const jwt = require('jsonwebtoken');
 const bcryptjs = require('bcrypt');
+const redis = require('../config/cache');
 
 async function registerController(req, res) {
     const { username, email, password } = req.body;
@@ -88,7 +89,7 @@ async function getMeController(req, res) {
     const userID = req.user.id;
 
     //find user
-    const user = await userModel.findById( userID );
+    const user = await userModel.findById(userID);
 
     if (!user) {
         return res.status(409).json({
@@ -101,8 +102,21 @@ async function getMeController(req, res) {
         user,
     });
 }
+
+async function logoutController(req, res) {
+    const token = req.cookies.token;
+
+    await redis.set(token, Date.now(), 'EX', 60 * 60);
+
+    res.clearCookie('token');
+
+    return res.status(200).json({
+        message: 'logged out successfully',
+    });
+}
 module.exports = {
     registerController,
     loginController,
-    getMeController
+    getMeController,
+    logoutController,
 };

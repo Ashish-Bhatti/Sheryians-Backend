@@ -1,5 +1,4 @@
-const Redis = require('ioredis').default;
-// we use .default because of the way ioredis exports its module and now it gives us Redis suggetions
+const Redis = require('ioredis');
 
 const redis = new Redis({
     host: process.env.REDIS_HOST,
@@ -11,7 +10,8 @@ redis.on('connect', () => {
     console.log('server is connected to redis');
 });
 
-
+redis.on('error', (err) => {
+    console.log('Redis error:', err);
+});
 
 module.exports = redis;
-// this module will connect redis to our server

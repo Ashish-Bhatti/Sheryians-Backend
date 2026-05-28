@@ -13,7 +13,9 @@ app.use(
 );
 
 const authRoute = require('../src/routes/auth.route');
+const songRoute = require('../src/routes/song.route');
 
 app.use('/api/auth', authRoute);
+app.use('/api/songs', songRoute);
 
 module.exports = app;

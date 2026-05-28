@@ -58,3 +58,6 @@ response
 
 -- install redis package
 npm i ioredis
+
+-- install node-id3 - it is used to read all the data inside a file with buffer
+npm i node-id3

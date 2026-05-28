@@ -16,3 +16,16 @@
 1. npm i cors
 2. npm i node-id3 - it is used to read all the data inside a file
 3. npm i ioredis - to use Redis, we use this package. You can know more about it in the 25MOODIFY project
+
+// defination
+1. One clean way to say it:
+
+Multer is middleware used to handle and read multipart/form-data (file uploads) sent from the frontend, because Express alone cannot properly read file data like images, videos, or songs.
+
+Very similar to:
+
+express.json() → reads JSON data
+express.urlencoded() → reads form text data
+multer → reads file upload data
+
+Without Multer, req.file or req.files would not exist because Express does not understand multipart file data by default.

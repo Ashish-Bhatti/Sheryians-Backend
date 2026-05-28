@@ -61,3 +61,37 @@ npm i ioredis
 
 -- install node-id3 - it is used to read all the data inside a file with buffer
 npm i node-id3
+
+
+
+-- req.query
+Difference between body params and query params:
+
+1. req.body
+
+Sent inside request body
+
+Example: JSON
+{
+   "mood": "happy"
+}
+Mostly used in:
+POST
+PUT
+PATCH
+
+2. req.query
+
+Sent in URL
+
+Example:?mood=happy
+
+Mostly used for:
+
+filtering
+searching
+pagination
+
+Like:/products?category=mobile
+/users?page=2
+/songs?mood=sad

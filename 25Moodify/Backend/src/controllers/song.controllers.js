@@ -50,13 +50,19 @@ async function uploadSong(req, res) {
 
 async function getSong(req, res) {
     const mood = req.query.mood;
+    /*
+    req.query is used to get the data from the query parameters that are
+    Sent in URL
+    Example:http://localhost:5173/api/songs?mood=happy
+    to know more check Readme.md
+     */
 
-    const song = await songModel.find({mood})
+    const song = await songModel.findOne({ mood });
 
     return res.status(200).json({
-        message : 'song fetched successfully',
-        song
-    })
+        message: 'song fetched successfully',
+        song,
+    });
 }
 
 module.exports = {

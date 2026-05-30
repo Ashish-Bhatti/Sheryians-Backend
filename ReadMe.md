@@ -16,6 +16,7 @@
 1. npm i cors
 2. npm i node-id3 - it is used to read all the data inside a file
 3. npm i ioredis - to use Redis, we use this package. You can know more about it in the 25MOODIFY project
+4. npm i express-validator - before sending data to the controller (heavy operation), we validate the data to check if it's even right or not
 
 // defination
 1. One clean way to say it:

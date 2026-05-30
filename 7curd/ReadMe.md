@@ -5,7 +5,6 @@
 3. store MONGO_URI = uri_string
 
 // mongoose
-// MONGO_URI = mongodb+srv://ashishbhattidev_db_user:CPUX7KRgfjM4EXlz@cluster0.dkmbyz9.mongodb.net/7curd
 
 - after last slash whatever we write become a database and if there is no database with that name it will auto create it
 

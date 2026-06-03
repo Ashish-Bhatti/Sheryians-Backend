@@ -18,6 +18,9 @@
 3. npm i ioredis - to use Redis, we use this package. You can know more about it in the 25MOODIFY project
 4. npm i express-validator - before sending data to the controller (heavy operation), we validate the data to check if it's even right or not. For more info, go to 30ExpressValidator File
 5. npm i socket.io - it is the backend library that enables real-time, two-way communication between clients and the server.
+6. npm i nodemailer - primary work is to send email. It will need 4 things GOOGLE_CLIENT_ID , GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN , GOOGLE_USER
+For more info visit this link - https://github.com/ankurdotio/Difference-Backend-video/tree/main/026-nodemailer
+And follow class Day-120 | Perplexity
 
 // defination
 1. One clean way to say it:

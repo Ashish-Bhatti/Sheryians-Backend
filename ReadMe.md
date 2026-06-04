@@ -22,6 +22,13 @@
 For more info visit this link - https://github.com/ankurdotio/Difference-Backend-video/tree/main/026-nodemailer
 And follow class Day-120 | Perplexity
 
+// to know more about from 7-11 visit 34GenAI repo
+7. npm i langchain
+8. npm i @langchain/mistralai
+9. npm i zod
+10. npm i nodemailer
+11. npm i readline-sync
+
 // defination
 1. One clean way to say it:
 

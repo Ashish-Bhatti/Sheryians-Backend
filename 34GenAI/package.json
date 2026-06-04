@@ -13,6 +13,8 @@
   "dependencies": {
     "@langchain/core": "^1.1.48",
     "@langchain/mistralai": "^1.1.0",
+    "@langchain/tavily": "^1.2.0",
+    "@tavily/core": "^0.7.5",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "langchain": "^1.4.4",

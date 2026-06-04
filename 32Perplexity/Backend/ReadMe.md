@@ -58,4 +58,7 @@ transporter.sendMail(mailOptions)
 
 # 2 new packages
 npm install @langchain/google-genai
+npm i @langchain/mistralai
 npm install langchain
+npm i @tavily/core
+npm i zod

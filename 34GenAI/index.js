@@ -5,23 +5,21 @@ import { ChatMistralAI } from '@langchain/mistralai';
 import { HumanMessage, tool, createAgent } from 'langchain';
 import { sendEmail } from './mail.service.js';
 import * as z from 'zod';
+import tavilyTool from './tavily.service.js';
 
 // Create a tool that the AI can use
 // When the AI decides to send an email, it will call sendEmail()
-const emailTool = tool(
-    sendEmail,
-    {
-        name: 'emailTool',
-        description: 'Use this tool to send an email',
+const emailTool = tool(sendEmail, {
+    name: 'emailTool',
+    description: 'Use this tool to send an email',
 
-        // Define what data the AI must provide
-        schema: z.object({
-            to: z.string().describe("The recipient's email address"),
-            html: z.string().describe('The HTML content of the email'),
-            subject: z.string().describe('The subject of the email'),
-        }),
-    }
-);
+    // Define what data the AI must provide
+    schema: z.object({
+        to: z.string().describe("The recipient's email address"),
+        html: z.string().describe('The HTML content of the email'),
+        subject: z.string().describe('The subject of the email'),
+    }),
+});
 
 // Create a command line chat interface
 const rl = readline.createInterface({
@@ -38,7 +36,17 @@ const model = new ChatMistralAI({
 // Agent = Model + Tools
 const agent = createAgent({
     model,
-    tools: [emailTool],
+    tools: [emailTool, tavilyTool],
+    systemPrompt: `
+You are a helpful assistant.
+
+Use Tavily whenever:
+- The user asks for current information.
+- The answer may have changed recently.
+- You need information from the internet.
+
+Use emailTool only when the user explicitly asks to send an email.
+`,
 });
 
 // Store the entire conversation history
@@ -48,7 +56,6 @@ const messages = [];
 let state = true;
 
 while (state) {
-
     // Wait for user input from terminal
     const userInput = await rl.question('\x1b[32mYou:\x1b[0m ');
 
@@ -69,8 +76,7 @@ while (state) {
 
     // response.messages contains all messages
     // The last message is usually the latest AI response
-    const aiMessage =
-        response.messages[response.messages.length - 1];
+    const aiMessage = response.messages[response.messages.length - 1];
 
     // Save AI response in chat history
     // This allows the AI to remember previous replies

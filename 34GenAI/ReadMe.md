@@ -12,6 +12,8 @@ npm i @langchain/mistralai
 npm i zod
 npm i nodemailer
 npm i readline-sync
+npm i @tavily/core
+npm i @langchain/tavily
 ```
 
 ---

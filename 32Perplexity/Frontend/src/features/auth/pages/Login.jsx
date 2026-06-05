@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import useAuth from '../hook/useAuth';
+import { useSelector } from 'react-redux';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const user = useSelector((state) => state.auth.user);
+    const loading = useSelector((state) => state.auth.loading);
+
     const navigate = useNavigate();
 
-    const submitForm = (event) => {
+    const { handleLogin } = useAuth();
+
+    const submitForm = async (event) => {
         event.preventDefault();
 
         const payload = {
@@ -15,9 +22,15 @@ const Login = () => {
             password,
         };
 
+        await handleLogin(payload);
+
         console.log('Login payload:', payload);
         navigate('/');
     };
+
+    if (!loading && user) {
+        return <Navigate to="/" replace />;
+    }
 
     return (
         <section className="min-h-screen bg-zinc-950 flex items-center justify-center text-zinc-100 sm:px-6 lg:px-8">

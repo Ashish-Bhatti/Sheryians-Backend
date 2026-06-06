@@ -63,3 +63,4 @@ npm install langchain
 npm i @tavily/core
 npm i zod
 npm i morgan - it is a logger - it's tells us which api is being called how much timet api take etc
+npm i socket.io

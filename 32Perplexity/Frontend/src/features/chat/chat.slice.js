@@ -16,7 +16,7 @@ const chatSlice = createSlice({
                 id: chatId,
                 title,
                 messages: [],
-                lastUpdated: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
             }
         },
         addNewMessage: (state, action) => {

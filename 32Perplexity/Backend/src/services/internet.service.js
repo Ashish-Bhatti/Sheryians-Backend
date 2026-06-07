@@ -4,7 +4,7 @@ const tvly = tavily({
     apiKey: process.env.TVLY_API_KEY,
 });
 
-async function searchInternet(query) {
+async function searchInternet({query}) {
     const results = await tvly.search(query, {
         maxResults: 5,
     });

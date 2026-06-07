@@ -23,17 +23,27 @@ const searchInternetTool = tool(searchInternet, {
 });
 
 const agent = createAgent({
-    model: mistralModel,
+    model: geminiModel,
     tools: [searchInternetTool],
 });
 
 export async function generateResponse(messages) {
     const response = await agent.invoke({
+
         messages: [
             new SystemMessage(`
-                   You are a helpful and precise assistant for answering questions.
-                    If you don't know the answer, say you don't know.
-                    If the question requires up-to-date information, use the "searchInternet" tool to get the latest information from the internet and then answer based on the search results.
+
+                You have access to a tool called searchInternet.
+                For:
+                - current events
+                - latest news
+                - stock prices
+                - weather
+                - sports results
+                - information after your training cutoff
+
+                ALWAYS call searchInternet before answering.
+                Do not guess.
             `),
             ...messages.map((msg) => {
                 if (msg.role == 'user') {
@@ -45,7 +55,13 @@ export async function generateResponse(messages) {
         ],
     });
 
-    return response.messages[response.messages.length - 1].text;
+    console.dir(response, { depth: null });
+
+    const lastMessage = response.messages[response.messages.length - 1];
+
+    // console.log(lastMessage);
+
+    return lastMessage.content;
 }
 
 export async function generateChatTitle(message) {

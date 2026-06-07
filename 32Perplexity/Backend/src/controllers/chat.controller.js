@@ -65,7 +65,7 @@ export async function getMessages(req, res) {
         });
     }
 
-    const message = await messageModel.find({
+    const messages = await messageModel.find({
         chat: chatId,
     });
 

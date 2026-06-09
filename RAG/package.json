@@ -1,6 +1,7 @@
 {
   "name": "rag",
   "version": "1.0.0",
+  "description": "npx yarn add packageName - it resolve dependency error problem while install packages with \"npm install packageName\"",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -8,8 +9,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "express": "^5.2.1"
+    "dotenv": "^17.4.2",
+    "pdf-parse": "^2.4.5"
   }
 }

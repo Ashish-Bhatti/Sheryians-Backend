@@ -9,3 +9,4 @@
 - npm install @langchain/mistralai @langchain/core
 - npm i @langchain/cohere
 - npm install @langchain/langgraph @langchain/core
+- npm i zod

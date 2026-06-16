@@ -15,6 +15,4 @@ const state = new StateSchema({
     }),
 });
 
-const solutionNode : GraphNode<typeof state> = async (state)=> {
-  const [MistralModel, CohereModel] = await Promise.all
-}
+ 

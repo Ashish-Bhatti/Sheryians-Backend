@@ -15,4 +15,4 @@ const state = new StateSchema({
     }),
 });
 
- 
+const graph = <GraphNode>

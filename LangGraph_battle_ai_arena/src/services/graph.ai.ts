@@ -14,3 +14,5 @@ const state = new StateSchema({
         solution_2_reasoning: z.string().default(''),
     }),
 });
+
+const a = 4;

@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3"
@@ -22,6 +23,7 @@
     "@langchain/google": "^0.1.12",
     "@langchain/langgraph": "^1.4.1",
     "@langchain/mistralai": "^1.1.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "langchain": "^1.4.5",

@@ -1,5 +1,5 @@
 import { ChatGoogle } from "@langchain/google";
-import { MistralAI } from "@langchain/mistralai"
+import { ChatMistralAI } from "@langchain/mistralai"
 import { ChatCohere } from "@langchain/cohere";
 import config from '../config/congif.js'
 
@@ -8,7 +8,7 @@ export const GoogleModel = new ChatGoogle({
     apiKey : config.GOOGLE_API_KEY
 });
 
-export const MistralModel = new MistralAI({
+export const MistralModel = new ChatMistralAI({
     model : "mistral-medium-latest" ,
     apiKey : config.MISTRAL_API_KEY
 })

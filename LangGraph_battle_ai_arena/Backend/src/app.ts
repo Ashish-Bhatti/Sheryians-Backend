@@ -13,7 +13,7 @@ app.use(cors({
 
 app.get('/', async (req, res) => {
 
-    const result = await runGraph("Write an code for Factorial function in js")
+    const result = await runGraph("Difference between AI and ML")
 
     res.json(result)
 })

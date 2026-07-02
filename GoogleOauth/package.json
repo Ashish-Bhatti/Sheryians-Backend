@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.11.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "name": "googleoauth",
+  "version": "1.0.0",
+  "description": "full documentation - https://github.com/ankurdotio/Difference-Backend-video/tree/main/025-googleoauth",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "npx nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

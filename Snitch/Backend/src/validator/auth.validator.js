@@ -1,5 +1,6 @@
 import { body, validationResult } from 'express-validator';
 
+//2nd it validate both login and register and if any validation have and error it gives an array of errors otherwise goes to next 
 const validateRequest = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -10,7 +11,7 @@ const validateRequest = (req, res, next) => {
 
     next();
 };
-
+// 1st it checks all the format and store the error
 export const validateRegisterUser = [
     body('email').isEmail().withMessage('Invalid email format'),
     body('contact')
@@ -23,3 +24,9 @@ export const validateRegisterUser = [
     // body('isSeller').isBoolean().withMessage('isSeller must be a boolean value'),
     validateRequest,
 ];
+
+export const validateLoginUser = [
+    body('email').isEmail().withMessage('Invalid email format'),
+    body('password').notEmpty().withMessage('Password is required'),
+    validateRequest,
+]

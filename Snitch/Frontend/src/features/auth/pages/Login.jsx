@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useAuth from '../hook/useAuth';
 import { useNavigate, Link } from 'react-router-dom';
+import ContinueWithGoogle from '../components/ContinueWithGoogle';
 
 const Login = () => {
     const { handleLogin } = useAuth();
@@ -67,18 +68,12 @@ const Login = () => {
             {/* Right side: Form Panel */}
             <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Background glow effects for the form area */}
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-yellow-500/10 blur-[120px] rounded-full pointer-events-none"></div>
-                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-yellow-600/5 blur-[150px] rounded-full pointer-events-none lg:hidden"></div>
+                <div className="absolute top-0 right-0 w-150 h-150 bg-yellow-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+                <div className="absolute bottom-0 left-0 w-100 h-100 bg-yellow-600/5 blur-[150px] rounded-full pointer-events-none lg:hidden"></div>
 
                 <div className="w-full max-w-md xl:max-w-lg mt-8 mb-8 lg:mt-0 lg:mb-0">
                     <div className="text-center mb-4 xl:mb-6">
                         <h2 className="text-2xl sm:text-3xl xl:text-4xl font-extrabold tracking-tight text-white mb-1.5">Sign In</h2>
-                        <p className="text-zinc-400 text-sm xl:text-base font-medium">
-                            Don't have an account?{' '}
-                            <Link to="/register" className="font-bold text-yellow-500 hover:text-yellow-400 transition-all">
-                                Create one
-                            </Link>
-                        </p>
                     </div>
 
                     <div className="bg-zinc-900/60 backdrop-blur-xl py-5 px-6 sm:p-6 xl:p-8 shadow-2xl rounded-3xl border border-white/5 relative overflow-hidden">
@@ -175,6 +170,8 @@ const Login = () => {
                                 </button>
                             </div>
 
+                            <ContinueWithGoogle />
+
                             {/* Submit Button */}
                             <div className="pt-2">
                                 <button
@@ -191,6 +188,12 @@ const Login = () => {
                                     </svg>
                                 </button>
                             </div>
+                            <p className="text-zinc-400 text-sm xl:text-base font-medium text-center">
+                                Don't have an account?{' '}
+                                <Link to="/register" className="font-bold text-yellow-500 hover:text-yellow-400 transition-all">
+                                    Create one
+                                </Link>
+                            </p>
                         </form>
                     </div>
                 </div>

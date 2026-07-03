@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const authApi = axios.create({
-    baseURL: 'http://localhost:3000/api/auth',
+    // baseURL: 'http://localhost:3000/api/auth',
+    baseURL: '/api/auth', // we are using proxy in vite.config.js to avoid CORS issues, so we can use relative path here
     withCredentials: true,
 });
 

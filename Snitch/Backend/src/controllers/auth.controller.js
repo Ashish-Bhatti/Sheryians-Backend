@@ -11,7 +11,7 @@ async function sendTokenResponse(user, res, message) {
         { expiresIn: '7d' }
     );
 
-    res.cookie('token', tokend);
+    res.cookie('token', token);
 
     res.status(200).json({
         message,
@@ -63,7 +63,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await userModel.findOne({ email });
+        const user = await userModel.findOne({ email }).select('+password');
 
         if (!user) {
             return res.status(400).json({

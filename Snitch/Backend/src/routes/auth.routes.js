@@ -11,7 +11,7 @@ authRouter.post('/register', validateRegisterUser, register);
 
 authRouter.post('/login', validateLoginUser, login);
 
-authRouter.post('/get-me', authenticateUser, getMe);
+authRouter.get('/get-me', authenticateUser, getMe);
 
 authRouter.get('/google',passport.authenticate("google", { scope: [ "profile", "email" ] }))
 

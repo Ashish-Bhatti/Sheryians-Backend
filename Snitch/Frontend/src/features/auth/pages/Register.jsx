@@ -27,7 +27,6 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
 
         const payload = {
             email: formData.email,
@@ -36,8 +35,14 @@ const Register = () => {
             isSeller: formData.isSeller,
             fullname: formData.fullName,
         };
-        await handleRegister(payload);
-        navigate('/');
+
+        try {
+            const user = await handleRegister(payload);
+            const role = user?.role || (user?.isSeller ? 'seller' : 'buyer');
+            navigate(role === 'seller' ? '/seller/dashboard' : '/');
+        } catch (error) {
+            console.error('Registration failed', error);
+        }
     };
 
     return (

@@ -21,14 +21,19 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
 
         const payload = {
             email: formData.email,
             password: formData.password,
         };
-        await handleLogin(payload);
-        navigate('/');
+
+        try {
+            const user = await handleLogin(payload);
+            const role = user?.role || (user?.isSeller ? 'seller' : 'buyer');
+            navigate(role === 'seller' ? '/seller/dashboard' : '/');
+        } catch (error) {
+            console.error('Login failed', error);
+        }
     };
 
     return (

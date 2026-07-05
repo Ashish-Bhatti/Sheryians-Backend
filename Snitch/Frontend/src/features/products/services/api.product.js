@@ -11,9 +11,9 @@ export async function createProduct(formData) {
 }
 
 export async function getSellerProduct() {
-    const resposne = await productApi.get('/seller');
+    const response = await productApi.get('/seller');
 
-    return resposne.data;
+    return response.data;
 }
 
 export async function getAllProduct() {
@@ -21,7 +21,27 @@ export async function getAllProduct() {
     return response.data;
 }
 
-export async function getProductById(productID) {
-    const response = await productApi.get(`/details/${productId}`);
+export async function getProductById(productId) {
+    const response = await productApi.get(`/detail/${productId}`);
     return response.data;
+}
+
+export async function addProductVariant(productId, newProductVariant) {
+
+    console.log(newProductVariant)
+
+    const formData = new FormData()
+
+    newProductVariant.images.forEach((image) => {
+        formData.append(`images`, image.file)
+    })
+
+    formData.append("stock", newProductVariant.stock)
+    formData.append("priceAmount", newProductVariant.price)
+    formData.append("attributes", JSON.stringify(newProductVariant.attributes))
+
+    const response = await productApiInstance.post(`/${productId}/variants`, formData)
+
+    return response.data
+
 }

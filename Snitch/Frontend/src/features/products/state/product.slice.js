@@ -5,12 +5,12 @@ import React, { act } from 'react';
 export const productSlice = createSlice({
     name: 'product',
     initialState: {
-        sellerProduct: [],
+        sellerProducts: [],
         product: [],
     },
     reducers: {
-        setSellerProduct: (state, action) => {
-            state.sellerProduct = action.payload;
+        setSellerProducts: (state, action) => {
+            state.sellerProducts = action.payload;
         },
         setProduct: (state, action) => {
             state.product = action.payload;
@@ -18,6 +18,6 @@ export const productSlice = createSlice({
     },
 });
 
-export const { setSellerProduct, setProduct } = productSlice.actions;
+export const { setSellerProducts, setProduct } = productSlice.actions;
 
 export default productSlice.reducer;

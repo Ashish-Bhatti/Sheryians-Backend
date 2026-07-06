@@ -91,7 +91,7 @@ export async function addProductVariant(req, res) {
     }
 
     const files = req.files;
-    const images = [];
+    /* const images = [];
     if (files || files.length !== 0) {
         (
             await Promise.all(
@@ -100,10 +100,27 @@ export async function addProductVariant(req, res) {
                         buffer: file.buffer,
                         fileName: file.originalname,
                     });
-                    return images;
+                    return image;
                 })
             )
         ).map((image) => images.push(image));
+    } */
+
+    let images = [];
+
+    if (files && files.length > 0) {
+        images = await Promise.all(
+            files.map(async (file) => {
+                const image = await uploadFile({
+                    buffer: file.buffer,
+                    fileName: file.originalname,
+                });
+
+                return {
+                    url: image.url,
+                };
+            })
+        );
     }
 
     const price = req.body.priceAmount;

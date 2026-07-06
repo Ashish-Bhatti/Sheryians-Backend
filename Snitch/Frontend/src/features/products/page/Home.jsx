@@ -4,6 +4,7 @@ import useProduct from '../hooks/useProduct';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 const Home = () => {
+    const navigate = useNavigate();
     const products = useSelector((state) => state.product.product);
     const user = useSelector((state) => state.auth.user);
     const { handleGetAllProducts } = useProduct();

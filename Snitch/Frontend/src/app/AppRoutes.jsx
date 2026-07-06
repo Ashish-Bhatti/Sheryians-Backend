@@ -8,39 +8,42 @@ import Home from '../features/products/page/Home';
 import ProductDetail from '../features/products/page/ProductDetail';
 import Protected from '../features/auth/components/Protected';
 import SellerProductDetails from '../features/products/page/SellerProductDetail';
+import AppLayout from './AppLayout';
 
 const AppRoutes = () => {
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/product/:productId" element={<ProductDetail />} />
 
-            <Route
-                path="/seller/create-product"
-                element={
-                    <Protected role="seller">
-                        <CreateProduct />
-                    </Protected>
-                }
-            />
-            <Route
-                path="/seller/dashboard"
-                element={
-                    <Protected role="seller">
-                        <Dashboard />
-                    </Protected>
-                }
-            />
-            <Route
-                path="/seller/product/:productId"
-                element={
-                    <Protected role="seller">
-                        <SellerProductDetails />
-                    </Protected>
-                }
-            />
+            <Route element={<AppLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/product/:productId" element={<ProductDetail />} />
+                <Route
+                    path="/seller/create-product"
+                    element={
+                        <Protected role="seller">
+                            <CreateProduct />
+                        </Protected>
+                    }
+                />
+                <Route
+                    path="/seller/dashboard"
+                    element={
+                        <Protected role="seller">
+                            <Dashboard />
+                        </Protected>
+                    }
+                />
+                <Route
+                    path="/seller/product/:productId"
+                    element={
+                        <Protected role="seller">
+                            <SellerProductDetails />
+                        </Protected>
+                    }
+                />
+            </Route>
         </Routes>
     );
 };

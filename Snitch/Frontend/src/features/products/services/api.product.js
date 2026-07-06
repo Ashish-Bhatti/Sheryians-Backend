@@ -40,7 +40,7 @@ export async function addProductVariant(productId, newProductVariant) {
     formData.append("priceAmount", newProductVariant.price)
     formData.append("attributes", JSON.stringify(newProductVariant.attributes))
 
-    const response = await productApiInstance.post(`/${productId}/variants`, formData)
+    const response = await productApi.post(`/${productId}/variants`, formData)
 
     return response.data
 

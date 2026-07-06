@@ -11,7 +11,7 @@ const upload = multer({
     },
 });
 
-const productRouter = express(Router());
+const productRouter = express.Router();
 
 /**
  * @route POST /api/product

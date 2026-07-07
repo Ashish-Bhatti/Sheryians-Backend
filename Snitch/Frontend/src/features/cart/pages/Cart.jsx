@@ -23,7 +23,7 @@ const tokens = {
 
 const Cart = () => {
     const cart = useSelector((state) => state.cart);
-    const { handleGetCart, handleIncrementCartItem, handleCreateCartOrder, handleVerifyCartOrder } = useCart();
+    const { handleGetCart, handleIncrementCartItem,handleDecrementCartItem, handleCreateCartOrder, handleVerifyCartOrder } = useCart();
     const navigate = useNavigate();
     // const { error, isLoading, Razorpay } = useRazorpay();
     const user = useSelector((state) => state.user);
@@ -196,7 +196,7 @@ const Cart = () => {
                                         <div key={itemKey} className="flex gap-6 md:gap-8 p-6 md:p-8 transition-all duration-300" style={{ backgroundColor: tokens.surfaceLow }}>
                                             {/* Product Image */}
                                             <div
-                                                className="flex-shrink-0 overflow-hidden"
+                                                className="shrink-0 overflow-hidden"
                                                 style={{
                                                     width: 'clamp(100px, 15vw, 160px)',
                                                     aspectRatio: '4/5',
@@ -278,7 +278,7 @@ const Cart = () => {
                                                     <div className="flex items-center" style={{ border: `1px solid ${tokens.outlineVariant}` }}>
                                                         <button
                                                             id={`qty-dec-${itemKey}`}
-                                                            onClick={() => changeQty(itemKey, -1)}
+                                                            onClick={() => handleDecrementCartItem({ productId: productId, variantId })}
                                                             className="w-9 h-9 flex items-center justify-center text-sm font-light transition-colors hover:opacity-60"
                                                             style={{ color: tokens.onSurface, borderRight: `1px solid ${tokens.outlineVariant}` }}
                                                             aria-label="Decrease quantity"
@@ -378,7 +378,7 @@ const Cart = () => {
                                         <span className="text-[10px] uppercase tracking-[0.18em]" style={{ color: tokens.secondary }}>
                                             Shipping
                                         </span>
-                                        <span className="text-[10px] uppercase tracking-[0.1em]" style={{ color: cart.totalPrice >= 15000 ? '#5a7a5a' : tokens.muted }}>
+                                        <span className="text-[10px] uppercase tracking-widest" style={{ color: cart.totalPrice >= 15000 ? '#5a7a5a' : tokens.muted }}>
                                             {cart.totalPrice >= 15000 ? 'Complimentary' : `Complimentary over INR 15,000`}
                                         </span>
                                     </div>
@@ -387,7 +387,7 @@ const Cart = () => {
                                         <span className="text-[10px] uppercase tracking-[0.18em]" style={{ color: tokens.secondary }}>
                                             Duties & Taxes
                                         </span>
-                                        <span className="text-[10px] uppercase tracking-[0.1em]" style={{ color: tokens.muted }}>
+                                        <span className="text-[10px] uppercase tracking-widest" style={{ color: tokens.muted }}>
                                             Included
                                         </span>
                                     </div>

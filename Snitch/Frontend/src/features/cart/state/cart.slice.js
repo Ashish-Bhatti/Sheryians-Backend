@@ -1,5 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const normalizeCartPayload = (payload) => {
+    const cartData = payload?.cart ?? payload;
+
+    return {
+        items: cartData?.items ?? [],
+        totalPrice: cartData?.totalPrice ?? null,
+        currency: cartData?.currency ?? null,
+    };
+};
+
 const cartSlice = createSlice({
     name: 'cart',
     initialState: {
@@ -9,16 +19,21 @@ const cartSlice = createSlice({
     },
     reducers: {
         setCart: (state, action) => {
-            state.items = action.payload.items;
-            state.totalPrice = action.payload.totalPrice;
-            state.currency = action.payload.currency;
+            const normalized = normalizeCartPayload(action.payload);
+            state.items = normalized.items;
+            state.totalPrice = normalized.totalPrice;
+            state.currency = normalized.currency;
         },
         addItem: (state, action) => {
             state.items.push(action.payload);
         },
         incrementCartItem: (state, action) => {
             const { productId, variantId } = action.payload;
-            const item = state.items.find((item) => item.productId === productId && item.variantId === variantId);
+            const item = state.items.find((item) => {
+                const itemProductId = item.product?._id?.toString?.() ?? item.product?.toString?.() ?? item.productId;
+                const itemVariantId = item.variant?._id?.toString?.() ?? item.variant?.toString?.() ?? item.variantId;
+                return itemProductId === productId && itemVariantId === variantId;
+            });
             if (item) {
                 item.quantity += 1;
             }

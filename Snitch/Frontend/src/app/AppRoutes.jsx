@@ -9,6 +9,7 @@ import ProductDetail from '../features/products/page/ProductDetail';
 import Protected from '../features/auth/components/Protected';
 import SellerProductDetails from '../features/products/page/SellerProductDetail';
 import AppLayout from './AppLayout';
+import Cart from '../features/cart/pages/Cart';
 
 const AppRoutes = () => {
     return (
@@ -43,6 +44,7 @@ const AppRoutes = () => {
                         </Protected>
                     }
                 />
+                <Route path='/cart' element={<Protected><Cart/></Protected>}/>
             </Route>
         </Routes>
     );

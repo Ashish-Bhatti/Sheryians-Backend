@@ -8,16 +8,22 @@ export const useCart = () => {
 
     async function handleAddItem({ productId, variantId }) {
         const data = await addItem({ productId, variantId });
-        dispatch(setCart(data));
-        console.log('Item added to cart:', data);
+
+        if (data?.success) {
+            const refreshedCart = await handleGetCart();
+            return refreshedCart;
+        }
+
+        console.log('Item add response:', data);
         return data;
     }
 
     async function handleGetCart() {
         const data = await getCart();
-        dispatch(setCart(data));
-        console.log('Cart retrieved:', data);
-        return data;
+        const normalizedCart = data?.cart ?? data;
+        dispatch(setCart(normalizedCart));
+        console.log('Cart retrieved:', normalizedCart);
+        return normalizedCart;
     }
 
     async function handleIncrementCartItem({ productId, variantId }) {

@@ -269,6 +269,7 @@ const ProductDetail = () => {
                                         e.currentTarget.style.color = '#fbf9f6';
                                     }}
                                     onClick={() => {
+                                        console.log(product._id, activeVariant._id)
                                         handleAddItem({
                                             productId: product._id,
                                             variantId: activeVariant._id

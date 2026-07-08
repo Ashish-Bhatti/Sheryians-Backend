@@ -1,7 +1,7 @@
 import express from 'express';
 import { authenticateUser } from '../middlewares/auth.middleware.js';
-import { validateAddToCart,validateCartItemQuantity } from '../validator/cart.validator.js';
-import { addToCart, getCart, incrementCartItemQuantity ,decrementCartItemQuantity} from '../controllers/cart.controller.js';
+import { validateAddToCart, validateCartItemQuantity } from '../validator/cart.validator.js';
+import { addToCart, getCart, incrementCartItemQuantity, decrementCartItemQuantity, createOrderController, verifyOrderController } from '../controllers/cart.controller.js';
 
 const cartRouter = express.Router();
 
@@ -41,4 +41,7 @@ cartRouter.patch('/quantity/increment/:productId/:variantId', authenticateUser, 
 
 cartRouter.patch('/quantity/decrement/:productId/:variantId', authenticateUser, validateCartItemQuantity, decrementCartItemQuantity);
 
+cartRouter.post('/payment/create/order', authenticateUser, createOrderController);
+
+cartRouter.post('/payment/verify/order', authenticateUser, verifyOrderController);
 export default cartRouter;

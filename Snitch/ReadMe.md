@@ -4,3 +4,5 @@
 4. expand
 
 -> problem statement :- only seller can create product and he can see all the product he created
+
+=> for Intergrating RazorPay use this github repo - https://github.com/ankurdotio/Difference-Backend-video/tree/main/024-razorpay

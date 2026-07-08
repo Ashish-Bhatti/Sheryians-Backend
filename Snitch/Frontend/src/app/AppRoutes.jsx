@@ -10,6 +10,7 @@ import Protected from '../features/auth/components/Protected';
 import SellerProductDetails from '../features/products/page/SellerProductDetail';
 import AppLayout from './AppLayout';
 import Cart from '../features/cart/pages/Cart';
+import OrderSuccess from '../features/cart/pages/OrderSuccess';
 
 const AppRoutes = () => {
     return (
@@ -45,6 +46,7 @@ const AppRoutes = () => {
                     }
                 />
                 <Route path='/cart' element={<Protected><Cart/></Protected>}/>
+                <Route path='/order-success' element={<OrderSuccess/>}/>
             </Route>
         </Routes>
     );

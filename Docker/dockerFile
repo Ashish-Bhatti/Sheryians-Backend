@@ -1,0 +1,21 @@
+# it will get node20 runtime environment and alpine-linux OS
+FROM node:20-alpine
+
+# set the working directory
+WORKDIR /server
+
+# copy packages files for better caching
+COPY package.json .
+COPY package-lock.json .
+
+# install dependencies
+RUN npm install
+
+# copy the all the codebase files
+COPY server.js .
+
+# Start the application
+CMD [ "node", "server.js" ]
+
+
+

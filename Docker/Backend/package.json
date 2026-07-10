@@ -1,6 +1,7 @@
 {
   "name": "docker",
   "version": "1.0.0",
+  "description": "=> docker setup\r 1. get runtime env and OS\r # it will get node20 runtime environment and alpine-linux OS\r FROM node:20-alpine",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -10,7 +11,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "express": "^5.2.1"
   }

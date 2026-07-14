@@ -19,11 +19,9 @@ app.use(morgan('dev'))
 //Serves static assets (CSS, JS, images, fonts, etc.) from the public folder.
 app.use(express.static('public'))
 
-app.get('/api/health',(req,res)=>{
-    res.status(200).json({
-        message : 'hello there'
-    })
-})
+app.get("/api/health", (req, res) => {
+    res.status(200).json({ status: "OK" });
+});
 
 app.get('/api/user',(req,res)=>{
     const user =  [

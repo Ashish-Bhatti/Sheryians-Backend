@@ -1,0 +1,81 @@
+# API version of the Kubernetes object.
+# Different Kubernetes resources belong to different API groups and versions.
+apiVersion: apps/v1
+
+# Type of Kubernetes resource.
+# Deployment manages Pods and ensures the desired number of replicas are always running.
+kind: Deployment
+
+metadata:
+  # Name of the Deployment.
+  # This is how Kubernetes identifies this Deployment.
+  name: express-deployment
+
+spec:
+  # Number of Pod replicas to run.
+  # Kubernetes will always try to keep 2 Pods alive.
+  replicas: 2
+
+  # Deployment uses this selector to identify which Pods it manages.
+  # It MUST match the labels defined in template.metadata.labels.
+  selector:
+    matchLabels:
+      app: express
+
+  # Blueprint (template) for creating new Pods.
+  template:
+    metadata:
+      # Labels assigned to every Pod created by this Deployment.
+      # Used by the Deployment and Services to identify these Pods.
+      labels:
+        app: express
+
+    spec:
+      # List of containers inside each Pod.
+      containers:
+
+        # Container configuration
+        - name: express-container
+
+          # Docker image to run inside the container.
+          # Format:
+          # <image-name>:<tag>
+          image: cohort_2_express:latest
+
+          # Always pull the latest version of the image before starting the Pod.
+          #
+          # Options:
+          # Always       -> Pull image every time a Pod starts.
+          # IfNotPresent -> Pull only if image doesn't exist locally.
+          # Never        -> Never pull (image must already exist on the node).
+          imagePullPolicy: Always
+
+          ports:
+            # Port on which the application listens INSIDE the container.
+            # This is NOT the port exposed to your browser.
+            # To expose it externally, you'll create a Kubernetes Service.
+            - containerPort: 3000
+
+          # Resource management
+          # Helps Kubernetes schedule Pods efficiently and prevents one Pod
+          # from consuming all CPU or RAM on a node.
+          resources:
+
+            # Maximum resources the container is allowed to use.
+            limits:
+              # Maximum RAM
+              memory: "128Mi"
+
+              # Maximum CPU
+              # 1000m = 1 CPU Core
+              # 500m = 0.5 CPU Core
+              cpu: "500m"
+
+            # Minimum resources Kubernetes guarantees to this container.
+            # Scheduler uses these values when deciding where to place the Pod.
+            requests:
+              # Minimum RAM guaranteed
+              memory: "64Mi"
+
+              # Minimum CPU guaranteed
+              cpu: "250m"

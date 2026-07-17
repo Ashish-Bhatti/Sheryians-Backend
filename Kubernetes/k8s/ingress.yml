@@ -1,0 +1,66 @@
+# API version for the Ingress resource.
+# Ingress resources belong to the networking API group.
+apiVersion: networking.k8s.io/v1
+
+# Defines this resource as an Ingress.
+# An Ingress routes external HTTP/HTTPS requests to Services inside the cluster.
+kind: Ingress
+
+metadata:
+  # Name of the Ingress resource.
+  name: express-ingress
+
+  # Labels are optional metadata used to organize and identify resources.
+  labels:
+    app.kubernetes.io/name: express-ingress
+
+spec:
+
+  # Specifies which Ingress Controller should handle this Ingress.
+  # Here, we're using the NGINX Ingress Controller.
+  ingressClassName: nginx
+
+  # Routing rules
+  rules:
+
+    # This rule handles incoming HTTP requests.
+    - http:
+        paths:
+
+          # Match all URLs that start with "/"
+          # Examples:
+          # /
+          # /about
+          # /login
+          # /api/users
+          - path: "/"
+
+            # Prefix means any URL beginning with "/" matches this rule.
+            #
+            # Types:
+            # Prefix -> Matches everything starting with the path.
+            # Exact  -> Matches only the exact path.
+            # ImplementationSpecific -> Behavior depends on the controller.
+            pathType: Prefix
+
+            backend:
+
+              # Forward matching requests to this Kubernetes Service.
+              service:
+
+                # Name of the Service that receives the request.
+                name: express-service
+
+                port:
+
+                  # Service port to forward traffic to.
+                  # This is the Service's port, NOT the container's port.
+                  #
+                  # Service Port (80)
+                  #        │
+                  #        ▼
+                  # express-service
+                  #        │
+                  #        ▼
+                  # targetPort (3000)
+                  number: 80

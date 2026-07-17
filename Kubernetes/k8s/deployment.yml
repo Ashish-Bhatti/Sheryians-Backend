@@ -46,9 +46,10 @@ spec:
           #
           # Options:
           # Always       -> Pull image every time a Pod starts.
+          # imagePullPolicy: Always, Kubernetes always tries to download the image from Docker Hub.
           # IfNotPresent -> Pull only if image doesn't exist locally.
           # Never        -> Never pull (image must already exist on the node).
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
 
           ports:
             # Port on which the application listens INSIDE the container.
@@ -67,7 +68,7 @@ spec:
               memory: "128Mi"
 
               # Maximum CPU
-              # 1000m = 1 CPU Core
+              # 1000m = 1 CPU Core = 1000 millicores
               # 500m = 0.5 CPU Core
               cpu: "500m"
 

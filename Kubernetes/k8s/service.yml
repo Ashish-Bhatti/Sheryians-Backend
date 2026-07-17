@@ -1,0 +1,49 @@
+# Service is responsible for exposing Pods inside (or outside) the Kubernetes cluster.
+# Unlike Pods, a Service provides a stable IP address and DNS name.
+kind: Service
+
+# API version for the Service resource.
+apiVersion: v1
+
+metadata:
+  # Name of the Service.
+  # Other Pods can access it using this DNS name.
+  name: express-service
+
+spec:
+
+  # The Service looks for Pods with this label.
+  # It forwards all incoming traffic to matching Pods.
+  #
+  # This MUST match the labels defined in your Deployment:
+  #
+  # template:
+  #   metadata:
+  #     labels:
+  #       app: express
+  selector:
+    app: express
+
+  # Type of Service.
+  #
+  # ClusterIP  -> Accessible only inside the Kubernetes cluster (default)
+  # NodePort   -> Accessible using <NodeIP>:<NodePort>
+  # LoadBalancer -> Creates an external load balancer (Cloud providers)
+  # ExternalName -> Maps the Service to an external DNS name
+  type: ClusterIP
+
+  ports:
+
+    # Optional name for the port.
+    # Useful when exposing multiple ports from the same Service.
+    - name: http
+
+      # Port exposed by the Service.
+      # Other Pods inside the cluster will connect to:
+      #
+      # http://express-service:80
+      port: 80
+
+      # Port on which the application is listening INSIDE the container.
+      # The Service forwards traffic from port 80 to container port 3000.
+      targetPort: 3000

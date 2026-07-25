@@ -1,0 +1,51 @@
+apiVersion: skaffold/v4beta13
+kind: Config
+
+metadata:
+  name: skaffold-app
+
+build:
+  local:
+    push: false
+
+  artifacts:
+  # The image: value in skaffold.yaml and the image: value in your Kubernetes Deployment must be identical.
+    - image: core-server
+      context: core
+      sync:
+        manual:
+          # Sync every JavaScript file
+          - src: "**/*.js"
+            dest: /app
+          # Sync every JSON file
+          - src: "**/*.json"
+            dest: /app
+
+    - image: notification-server
+      context: notification
+      sync:
+        manual:
+          - src: "**/*.js"
+            dest: /app
+          - src: "**/*.json"
+            dest: /app
+
+manifests:
+  rawYaml:
+    - k8s/core-deployment.yml
+    - k8s/notification-deployment.yml
+    - k8s/core-service.yml
+    - k8s/notification-service.yml
+    - k8s/ingress.yml
+
+portForward:
+  # Core API
+  - resourceType: service
+    resourceName: core-service
+    port: 80
+    localPort: 3000
+  # Notification API
+  - resourceType: service
+    resourceName: notification-service
+    port: 80
+    localPort: 8080

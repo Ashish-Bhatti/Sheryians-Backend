@@ -1,0 +1,26 @@
+# Tells Skaffold which configuration version you're using.
+apiVersion: skaffold/v4beta13
+kind: Config
+
+# Everything related to building Docker images goes here.
+build:
+
+#Because you're using Docker Desktop Kubernetes, Skaffold builds images locally and doesn't push them to Docker Hub or ECR
+  local:
+    push: false
+
+# Each artifact represents one Docker image.
+  artifacts:
+  # Equivalent to: docker build -t core ./core
+    - image: core
+      context: ./core
+
+  # Equivalent to: docker build -t notification ./notification
+    - image: notification
+      context: ./notification
+
+# Equivalent to: kubectl apply -f k8s/
+# Skaffold applies every YAML file inside the k8s folder.
+manifests:
+  rawYaml:
+    - k8s/*.yaml

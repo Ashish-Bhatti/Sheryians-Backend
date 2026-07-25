@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: core-deployment
+
+spec:
+  replicas : 3
+  selector:
+    matchLabels:
+      app: core
+
+  template:
+    metadata:
+      labels:
+        app: core
+
+    spec:
+      containers:
+      - name: core-container
+      # The image: value in skaffold.yaml and the image: value in your Kubernetes Deployment must be identical.
+        image: core-server
+        imagePullPolicy: IfNotPresent
+
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+          requests :
+            memory : "64Mi"
+            cpu : "250m"
+
+        ports:
+        - containerPort: 3000

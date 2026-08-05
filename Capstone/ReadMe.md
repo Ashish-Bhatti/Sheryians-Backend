@@ -48,3 +48,6 @@ kubectl apply -f ./k8s
 => day 2
 - sandbox pods :- we give sandbox microservice access to create user pods with creating there service
 - Router server :- it sends traffic to pods services
+
+
+// start doing dsa questions

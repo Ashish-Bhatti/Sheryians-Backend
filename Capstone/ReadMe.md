@@ -39,15 +39,10 @@ npm i uuid
 kubectl apply -f ./k8s
 
 
-
-
-
 => day 1
 - we setup sandbox microservice in kubernetes with basic express server and yml files
 
 => day 2
 - sandbox pods :- we give sandbox microservice access to create user pods with creating there service
 - Router server :- it sends traffic to pods services
-
-
-// start doing dsa questions
+estions

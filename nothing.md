@@ -1,1 +1,1 @@
-nothing here just for git repo
+today i explored the twitch and i am planning to start live stream there of off the grid game 

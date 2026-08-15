@@ -1,1 +1,1 @@
-i instaaled git for my new laptop and testing if its working or not
+installed git in new laptop and now i am testing it 

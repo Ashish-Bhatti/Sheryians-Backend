@@ -1,1 +1,1 @@
-nothing here just for git repo
+i instaaled git for my new laptop and testing if its working or not

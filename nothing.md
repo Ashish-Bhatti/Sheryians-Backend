@@ -1,1 +1,1 @@
-installed git in new laptop and now i am testing it 
+tested off the grid game we optimize settings and it felt good`

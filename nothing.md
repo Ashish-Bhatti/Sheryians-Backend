@@ -1,1 +1,1 @@
-tested off the grid game we optimize settings and it felt good`
+struggling to get back to code

@@ -8,6 +8,6 @@ export default defineConfig({
     host : '0.0.0.0',
     port : 5173 ,
     allowedHosts : true
-    // vite create outer traffic (from router) and service treated differently and that why we use this to allow the traffic from the router server
+    // vite create outer traffic (from router) and service treated differently and that's why we use this to allow the traffic from the router server
   }
 })

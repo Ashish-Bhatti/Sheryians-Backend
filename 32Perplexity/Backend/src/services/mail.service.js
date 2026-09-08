@@ -19,7 +19,7 @@ transporter
         console.log('Ready to send email');
     })
     .catch((err) => {
-        console.error('Error with email transporter: ', errr);
+        console.error('Error with email transporter: ', err);
     });
 
 export const sendEmail = async ({ to, subject, html, text }) => {

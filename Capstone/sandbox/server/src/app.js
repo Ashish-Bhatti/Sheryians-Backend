@@ -22,16 +22,23 @@ app.get('/api/sandbox/health', (req, res) => {
     });
 });
 
+app.get('/api/sandbox/check', (req, res) => {
+    res.status(200).json({
+        message: 'Sandbox API is healthy',
+        status: 'ok',
+    });
+});
+
 app.post('/api/sandbox/start', async (req, res) => {
     const sandboxId = uuid();
 
     await Promise.all([createPod(sandboxId), createService(sandboxId)]);
 
     return res.status(201).json({
-        message : 'Sandbox enviroment created successfully',
+        message: 'Sandbox enviroment created successfully',
         sandboxId,
-        previewURL : `https://${sandboxId}.preview.localhost`
-    })
+        previewURL: `https://${sandboxId}.preview.localhost`,
+    });
 });
 
 export default app;

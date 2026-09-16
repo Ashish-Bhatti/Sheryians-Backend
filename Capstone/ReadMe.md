@@ -47,4 +47,9 @@ kubectl apply -f ./k8s
 - Router server :- it sends traffic to pods services
 estions
 - rbac.yml :- by default kubernetes don't allow any pods to create pods so we need to create a role and role binding to allow pods to create pods and to give that permission we just rbac.yaml file
-    we are creating a service account with rbac.yml file like CTO of a company and gave some permissions to that service account and we will give this role to sandbox pods so that they can create there on pods for preview 
+    we are creating a service account with rbac.yml file like CTO of a company and gave some permissions to that service account and we will give this role to sandbox pods so that they can create there on pods for preview
+
+
+
+# Install nginx ingress controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/cloud/deploy.yaml

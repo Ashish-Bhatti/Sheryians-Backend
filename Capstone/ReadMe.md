@@ -30,6 +30,9 @@ npm i http-proxy-middleware
 "dev": "nodemon -L server.js",
 - -L for legacy or (commonly in Docker, WSL, or network-mounted filesystems)
 
+- import fs from 'fs'; is a JavaScript statement used to import Node.js's built-in File System (fs) module. This module provides a set of functions for interacting with the file system, such as reading, writing, and deleting files.
+
+
 | Probe              | Purpose                                                            | What happens if it fails?                                                               |
 | ------------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | **livenessProbe**  | Checks if the application is still alive (not hung or deadlocked). | Kubernetes **restarts** the container.                                                  |
@@ -51,7 +54,25 @@ estions
 - rbac.yml :- by default kubernetes don't allow any pods to create pods so we need to create a role and role binding to allow pods to create pods and to give that permission we just rbac.yaml file
     we are creating a service account with rbac.yml file like CTO of a company and gave some permissions to that service account and we will give this role to sandbox pods so that they can create there on pods for preview
 - router
-to bypass the cors error and to send traffic from router to pods 
+to bypass the cors error and to send traffic from router to pods
+
+=> day 3
+- we will create 2 container inside a pod and both will have access to /workspace directory
+- 1st container/template/vite-dev-server is only for preview url
+- 2nd container/agent/express server will give us api - read/list/update/create file so we can can change /workspace folder content
+- Once this pod is closed everything will be deleted for now
+- we will add a volume inside /sandbox/server/kubernetes/pods.js as /workspace_volume so both of those container can access it and we can sync them and there will /workspace folder in both agent and vite-dev-server container
+- after doing step 5 our router server now handle both type of api
+  pod1.preview.localhost
+  pod1/agent/localhost
+- 
+
+setps :-
+1. create a express server in agent folder inside sandox
+2. change /sandbox/server/kubernetes/pods.js to add new image agent so we can run 2 container inside a pod
+3. creating a volume inside /sandbox/server/kubernetes/pods.js as /workspace so both of those container can access it and we can sync them and there will /workspace folder in both agent and vite-dev-server container
+4. creating volumeMount in both images to sync them with workspace_volume
+5. change ./k8s/ingress.yml to add  - host: '*.agent.localhost'
 
 
 

@@ -65,7 +65,12 @@ to bypass the cors error and to send traffic from router to pods
 - after doing step 5 our router server now handle both type of api
   pod1.preview.localhost
   pod1/agent/localhost
-- 
+- create initContainer to copy /workspace/. to /seed/ in agent container
+  they will run first in any pods and after doing there work they close automatically
+  we create this container because our workspace volume is syncing with vite container but that make the vite container an emplty folder but we need vite setup in it and thats why we are using this so we can fill the mount_volume with vite setup
+- we will add a volumeMount in both images to sync them with workspace_volume
+
+
 
 setps :-
 1. create a express server in agent folder inside sandox

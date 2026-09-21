@@ -90,3 +90,4 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 # kubectl rollout command from the k8s folder
  kubectl rollout restart deployment router-deployment
 
+maintaining readme file 

@@ -8,6 +8,8 @@ const WORKING_DIR = '/workspace';
 const app = express();
 
 app.use(morgan('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     res.status(200).json({
@@ -15,13 +17,53 @@ app.get('/', (req, res) => {
         status: 'success',
     });
 });
-
+/**
+ * @route GET /list-files
+ * @description Lists all files in the working directory and its subdirectories. Returns a JSON object with the file paths relative to the working directory. exclude directories like node_modules, .git,dist, etc.
+ * - eg. {
+ *     "files": [
+ *         "file1.txt",
+ *         "src/file2.txt",
+ *         "src/subdir/file3.txt"
+ *     ]
+ * }
+ */
 app.get('/list-files', async (req, res) => {
-    const elements = await fs.promises.readdir(WORKING_DIR);
-    res.status(200).json({
-        message: 'Elements listed successfully',
-        files: elements,
-    });
+    const listFiles = async (dir, baseDir) => {
+        const entries = await fs.promises.readdir(dir, { withFileTypes: true });
+        const files = [];
+
+        for (const entry of entries) {
+            const fullPath = path.join(dir, entry.name);
+            const relativePath = path.relative(baseDir, fullPath);
+
+            // Exclude certain directories
+            if (entry.isDirectory() && ['node_modules', '.git', 'dist'].includes(entry.name)) {
+                continue;
+            }
+
+            if (entry.isDirectory()) {
+                files.push(...(await listFiles(fullPath, baseDir)));
+            } else {
+                files.push(relativePath);
+            }
+        }
+
+        return files;
+    };
+
+    try {
+        const files = await listFiles(WORKING_DIR, WORKING_DIR);
+        res.status(200).json({
+            message: 'Files listed successfully',
+            files,
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: `Error listing files: ${err.message}`,
+            status: 'error',
+        });
+    }
 });
 
 /**
@@ -47,11 +89,11 @@ app.get('/read-file', async (req, res) => {
             try {
                 const content = await fs.promises.readFile(filePath, 'utf-8');
                 return {
-                    [filePath]: content,
+                    [filePath.replace(WORKING_DIR, '')]: content,
                 };
             } catch (err) {
                 return {
-                    [filePath]: `Error reading file: ${err.message}`,
+                    [filePath.replace(WORKING_DIR, '')]: `Error reading file: ${err.message}`,
                 };
             }
         })
@@ -68,6 +110,16 @@ app.get('/read-file', async (req, res) => {
  * @description Updates the content of files specified in the request body. The request body should container a property 'updates' with a JSON Array of object, each object should have a 'file' property specifying the file path (relative to the working directory) and a 'content' property specifying the new content for the file.
  * - eg. {
  *      "/file1.txt": "New content for file 1",
+ *
+ * -format it expects -
+ * {
+    "updates" : [
+        {
+            "file" : "/src/App.jsx",
+            "content" : ""
+        }
+    ]
+    }
  */
 app.patch('/update-files', async (req, res) => {
     const updates = req.body.updates;
@@ -84,6 +136,7 @@ app.patch('/update-files', async (req, res) => {
             const { file, content } = update;
             const filePath = path.join(WORKING_DIR, file);
             try {
+                await fs.promises.mkdir(path.dirname(filePath), { recursive: true }); // it is to create file inside folder
                 await fs.promises.writeFile(filePath, content, 'utf-8');
                 return {
                     [filePath]: 'File updated successfully',
@@ -98,6 +151,46 @@ app.patch('/update-files', async (req, res) => {
 
     res.status(200).json({
         message: 'File update results',
+        results,
+    });
+});
+
+/**
+ * @route POST /create-files
+ * @description Creates new files with the content specified in the request body. The request body should contain a property 'files' with a JSON Array of objects, each object should have a 'file' property specifying the file path (relative to the working directory) and a 'content' property specifying the content for the new file.
+ */
+app.post('/create-files', async (req, res) => {
+    const files = req.body.files;
+
+    if (!files || !Array.isArray(files)) {
+        return res.status(400).json({
+            message: 'Invalid request body. Expected a JSON object with a "files" property containing an array of file objects.',
+            status: 'error',
+        });
+    }
+
+    const results = await Promise.all(
+        files.map(async (fileObj) => {
+            const { file, content } = fileObj;
+
+            const filePath = path.join(WORKING_DIR, file);
+
+            try {
+                await fs.promises.mkdir(path.dirname(filePath), { recursive: true });
+                await fs.promises.writeFile(filePath, content, 'utf-9');
+                return {
+                    [filePath]: 'File created successfully',
+                };
+            } catch (err) {
+                return {
+                    [filePath]: `Error creating file : ${err.message}`,
+                };
+            }
+        })
+    );
+
+    res.status(200).json({
+        message: 'File creation results',
         results,
     });
 });

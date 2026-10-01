@@ -64,7 +64,7 @@ to bypass the cors error and to send traffic from router to pods
 - we will add a volume inside /sandbox/server/kubernetes/pods.js as /workspace_volume so both of those container can access it and we can sync them and there will /workspace folder in both agent and vite-dev-server container
 - after doing step 5 our router server now handle both type of api
   pod1.preview.localhost
-  pod1/agent/localhost
+  pod1.agent.localhost
 - Create an initContainer to copy /workspace/. from the template image to /seed/ (the shared volume).
 1. InitContainers run before the main containers and automatically stop after completing their task.
 2. We use this because mounting the empty workspace-volume at /workspace would hide the Vite setup from the template image and make /workspace empty.
@@ -90,4 +90,4 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 # kubectl rollout command from the k8s folder
  kubectl rollout restart deployment router-deployment
 
-maintaining readme file 
+maintaining readme file

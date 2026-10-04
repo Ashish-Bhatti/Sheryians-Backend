@@ -72,6 +72,8 @@ to bypass the cors error and to send traffic from router to pods
 
 - Add a volumeMount for workspace-volume in both the Vite and Agent containers so they share and sync the same /workspace files.
 
+- now create 4 api to list, update, create, read
+
 
 
 setps :-

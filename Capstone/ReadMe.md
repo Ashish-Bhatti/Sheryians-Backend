@@ -85,6 +85,17 @@ setps :-
 
 
 
+# important :-
+- Add a watch configuration in sandbox/template/vite/config.js:
+ watch: {
+        usePolling: true,
+        interval: 300,
+        ignored: ['node_modules'],
+    },
+
+When the AI agent makes rapid code changes, Vite will check for file changes every 300ms instead of reacting to every change immediately. This helps prevent the preview window from flickering/blinking due to rapid successive updates.
+
+
 # Install nginx ingress controller
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/cloud/deploy.yaml
 

@@ -10,7 +10,7 @@ const httpsAgent = new https.Agent({
 export const listFiles = tool(
     async () => {
         console.log('listFiles is called');
-        const response = await axios.get('https://01a1079a-3ed7-7192-a45d-97812e91b9e3.agent.localhost/list-files', {
+        const response = await axios.get('https://01a1115a-69a6-7172-901c-71a4fcae6aff.agent.localhost/list-files', {
             httpsAgent,
         });
 
@@ -20,7 +20,8 @@ export const listFiles = tool(
     },
     {
         name: 'list_files',
-        description: 'List all the files in the project directory.',
+        description:
+            'Discover available project files. This tool ONLY lists files. It does not read or modify files. After using this tool, you must use read_files to inspect the relevant file before making changes.',
         schema: z.object({}),
     }
 );
@@ -29,7 +30,7 @@ export const readFile = tool(
     async ({ files = [] }) => {
         console.log('readfile is called');
 
-        const response = await axios.get('https://01a1079a-3ed7-7192-a45d-97812e91b9e3.agent.localhost/read-file?files=' + files.join(','), {
+        const response = await axios.get('https://01a1115a-69a6-7172-901c-71a4fcae6aff.agent.localhost/read-file?files=' + files.join(','), {
             httpsAgent,
         });
 
@@ -39,7 +40,7 @@ export const readFile = tool(
     },
     {
         name: 'read_files',
-        description: 'Read the contents of specified files. This is useful for understanding the content of files that are relevant to the task at hand.',
+        description: 'Read the contents of project files before modifying them. After reading the relevant file, use update_files to apply the requested change.',
         schema: z.object({
             files: z.array(z.string()).describe('The list of files absolute paths to read. These should be files that were listed using the list_files tool or created later'),
         }),
@@ -51,7 +52,7 @@ export const updateFiles = tool(
         console.log('updateFiles is called');
 
         const response = await axios.patch(
-            'https://01a1079a-3ed7-7192-a45d-97812e91b9e3.agent.localhost/update-files',
+            'https://01a1115a-69a6-7172-901c-71a4fcae6aff.agent.localhost/update-files',
             {
                 updates: files,
             },
@@ -67,7 +68,7 @@ export const updateFiles = tool(
     {
         name: 'update_files',
         description:
-            'Update the contents of specified files. This is useful for making changes to files based on the requirements of the task at hand. this tool can also use to create new files by providing a new file name in the file field and the content to be added in the content field.',
+            'Apply code changes to project files. You MUST use this tool to complete any request that asks to change, modify, fix, or create code. Never claim a code change is complete without successfully calling this tool. This tool can also be used to create new files by providing a new file name in the file field and the content to be added in the content field.',
         schema: z.object({
             files: z
                 .array(

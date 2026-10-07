@@ -3,6 +3,14 @@
 2. npm i axios
 3. npm i zod
 4. npm i https
+5. npm install @langchain/openrouter
+
+all npm models
+    @langchain/google-genai": "^2.3.2",
+    "@langchain/groq": "^1.3.1",
+    "@langchain/langgraph": "^1.4.19",
+    "@langchain/mistralai": "^1.2.0",
+    "@langchain/ollama": "^1.3.0",
 
 # AI Agent → Sandbox
 - Added an LLM-powered coding agent using LangChain.

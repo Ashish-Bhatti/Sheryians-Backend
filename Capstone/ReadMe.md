@@ -104,3 +104,25 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
  kubectl rollout restart deployment router-deployment
 
 maintaining readme file
+
+# how to create secret key in kubectl
+ kubectl create secret generic ai-secret --from-literal=GROQ_API_KEY=adjkflkasjdlkfjsshkasdhlfkl
+
+ also add this inside deployment file of the service that need that key
+ env:
+    - name: GROQ_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: ai-secret
+                key: GROQ_API_KEY
+
+
+# how to start all this with skaffold
+1. kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/cloud/deploy.yaml
+2. kubectl create secret generic ai-secret --from-literal=GROQ_API_KEY=adjkflkasjdlkfjsshkasdhlfkl
+3. skaffold dev
+
+# if you are using ollama with docker and kubernetes 
+1. $env:OLLAMA_HOST="0.0.0.0:11434"
+2. ollama serve
+3. and chande baseURL frrom the MODEL config file - baseUrl: "http://host.docker.internal:11434",

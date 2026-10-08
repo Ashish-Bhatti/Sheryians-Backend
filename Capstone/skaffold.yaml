@@ -1,10 +1,98 @@
 apiVersion: skaffold/v4beta13
 kind: Config
+metadata:
+  name: capstone
 
+# ── Build ──────────────────────────────────────────
 build:
+  tagPolicy:
+    sha256: {}
+  local:
+    push: false        # use local images, don't push to registry
   artifacts:
-  - image: ai-orchestration
-    context: ai-orchestration
-    docker:
-      dockerfile: Dockerfile
-      
+
+    - image: ai-orchestration
+      context: ai-orchestration
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual:             # paths are relative to ./core context
+          - src: '**/*.js'     # NOT 'core/**/*.js' ← that would fail
+            dest: /app
+          - src: '**/*.json'
+            dest: /app
+
+    - image: agent
+      context: sandbox/agent
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: /app
+          - src: '**/*.json'
+            dest: /app
+
+    - image: router
+      context: sandbox/router
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: /app
+          - src: '**/*.json'
+            dest: /app
+
+    - image: sandbox
+      context: sandbox/server
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: /app
+          - src: '**/*.json'
+            dest: /app
+
+    - image: template
+      context: sandbox/template
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: /workspace
+          - src: '**/*.jsx'
+            dest: /workspace
+          - src: '**/*.css'
+            dest: /workspace
+          - src: '**/*.json'
+            dest: /workspace
+
+# ── Manifests ──────────────────────────────────────
+manifests:
+  rawYaml:
+    - k8s/ai-deployment.yml
+    - k8s/ai-service.yml
+    - k8s/router-deployment.yml
+    - k8s/router-service.yml
+    - k8s/sandbox-deployment.yml
+    - k8s/sandbox-service.yml
+    - k8s/rbac.yml
+    - k8s/ingress.yml
+
+# ── Port Forwarding ────────────────────────────────
+portForward:
+  - resourceType: service
+    resourceName: ai-service
+    port: 80
+    localPort: 3000
+  - resourceType: service
+    resourceName: router-service
+    port: 80
+    localPort: 3000
+  - resourceType: service
+    resourceName: sandbox-service
+    port: 80
+    localPort: 3000

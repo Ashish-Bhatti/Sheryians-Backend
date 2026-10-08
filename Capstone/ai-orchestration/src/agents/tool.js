@@ -1,20 +1,18 @@
 import axios from 'axios';
-import https from 'https';
 import { tool } from 'langchain';
 import { z } from 'zod';
 
-const httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-});
-
+// when we work with langchain we can pass 2 parameters to our agent. First one should be a object containing the messages and the second one should be a config object. The config object can contain a context field. The context field can be used to pass additional information to the agent, such as the projectId. For example, if we want to pass the projectId to the agent, we can do it like this:
 export const listFiles = tool(
-    async () => {
+    async ({}, config) => {
+        console.log("===============================================================");
         console.log('listFiles is called');
-        const response = await axios.get('https://01a1115a-69a6-7172-901c-71a4fcae6aff.agent.localhost/list-files', {
-            httpsAgent,
-        });
+        console.log("===============================================================");
+        const response = await axios.get(`http://sandbox-service-${config.context.projectId}:3000/list-files`);
 
+        console.log("===============================================================");
         console.log('listFiles is called', JSON.stringify(response.data));
+        console.log("===============================================================");
 
         return JSON.stringify(response.data.files);
     },
@@ -23,18 +21,20 @@ export const listFiles = tool(
         description:
             'Discover available project files. This tool ONLY lists files. It does not read or modify files. After using this tool, you must use read_files to inspect the relevant file before making changes.',
         schema: z.object({}),
-    }
-);
+    },)
+
 
 export const readFile = tool(
-    async ({ files = [] }) => {
+    async ({ files = [] }, config) => {
+        console.log("===============================================================");
         console.log('readfile is called');
+        console.log("===============================================================");
 
-        const response = await axios.get('https://01a1115a-69a6-7172-901c-71a4fcae6aff.agent.localhost/read-file?files=' + files.join(','), {
-            httpsAgent,
-        });
+        const response = await axios.get(`http://sandbox-service-${config.context.projectId}:3000/read-file?files=` + files.join(','));
 
+        console.log("===============================================================");
         console.log('readfile is called', JSON.stringify(response.data));
+        console.log("===============================================================");
 
         return JSON.stringify(response.data);
     },
@@ -48,20 +48,21 @@ export const readFile = tool(
 );
 
 export const updateFiles = tool(
-    async ({ files }) => {
+    async ({ files }, config) => {
+        console.log("===============================================================");
         console.log('updateFiles is called');
+        console.log("===============================================================");
 
         const response = await axios.patch(
-            'https://01a1115a-69a6-7172-901c-71a4fcae6aff.agent.localhost/update-files',
+            `http://sandbox-service-${config.context.projectId}:3000/update-files`,
             {
                 updates: files,
-            },
-            {
-                httpsAgent,
             }
         );
 
+        console.log("===============================================================");
         console.log('updatefile is called', JSON.stringify(response.data.results));
+        console.log("===============================================================");
 
         return JSON.stringify(response.data.results);
     },
@@ -78,46 +79,36 @@ export const updateFiles = tool(
 );
 
 
-/* export const updateFiles = tool(
-    async ({ files }) => {
-        console.log('updateFiles is called');
+// import https from 'https';
 
-        const response = await axios.patch(
-            'https://01a1115a-69a6-7172-901c-71a4fcae6aff.agent.localhost/update-files',
-            {
-                updates: files,
-            },
-            {
-                httpsAgent,
-            }
-        );
+// HTTPS agent used when communicating with services that use HTTPS
+// and may have self-signed/untrusted certificates.
+//
+// We are currently using HTTP between our Kubernetes services,
+// so this is not needed right now.
+//
+// If we switch the service back to HTTPS in the future, restore:
+//
+// import https from 'https';
+//
+// const httpsAgent = new https.Agent({
+//     rejectUnauthorized: false,
+// });
+//
+// Then pass `httpsAgent` in the Axios request options.
+//
+// IMPORTANT:
+// If you see an error like:
+//   EPROTO
+//   tls_validate_record_header
+//   wrong version number
+//
+// Check whether the URL uses `https://` while the target server
+// is actually serving plain `http://`. This was the cause of this issue.
 
-        console.log(
-            'updateFiles response:',
-            JSON.stringify(response.data.results)
-        );
-
-        return JSON.stringify(response.data.results);
-    },
-    {
-        name: 'update_files',
-        description:
-            'Apply code changes to project files. You MUST use this tool to complete any request that asks to change, modify, fix, or create code. Never claim a code change is complete without successfully calling this tool. Provide one or more file updates inside the files array. Each update must contain the absolute file path in "file" and the complete new file content in "content".',
-        schema: z.object({
-            files: z
-                .array(
-                    z.object({
-                        file: z
-                            .string()
-                            .describe('The absolute path of the file to update or create'),
-                        content: z
-                            .string()
-                            .describe(
-                                'The complete new content of the file. Preserve valid syntax for that file type.'
-                            ),
-                    })
-                )
-                .describe('A list of files to update or create'),
-        }),
-    }
-); */
+/*
+import axios from 'axios';
+// import https from 'https';
+import { tool } from 'langchain';
+import { z } from 'zod';
+ */

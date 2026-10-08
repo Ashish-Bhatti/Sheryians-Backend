@@ -6,9 +6,9 @@ import { createAgent } from 'langchain';
 const model = new ChatOllama({
     model: 'qwen3:8b',
     numCtx: 8192,
-    numPredict: 9000,
+    numPredict: 2048,
     temperature: 0,
-    baseUrl: 'http://127.0.0.1:11434',
+    baseUrl: "http://host.docker.internal:11434",
 });
 const agent = createAgent(
     {
@@ -256,5 +256,7 @@ the result must be a gym website — not a redesigned cooking website.
         recursionLimit: 25,
     }
 );
+
+console.log(agent.getGraph());
 
 export default agent;

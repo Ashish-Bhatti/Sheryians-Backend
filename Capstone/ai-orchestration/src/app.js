@@ -10,12 +10,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // routes
-app.get('/', (req, res) => {
-    res.status(200).json({
-        message: 'Hello, World!',
-        status: 'success',
-    });
-});
 
 app.get('/api/status/healthz', (req, res) => {
     res.status(200).json({

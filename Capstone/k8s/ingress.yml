@@ -4,6 +4,10 @@ metadata:
   name: capstone-ingress
   labels:
     app.kubernetes.io/name: capstone-ingress
+    # this annotation is used to set the timeout for the ingress controller. The default timeout is 60 seconds, but we want to set it to 300 seconds (5 minutes) to allow for longer running requests.
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3000"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3000"
 spec:
   ingressClassName : nginx
   rules:
@@ -14,6 +18,15 @@ spec:
           backend:
             service:
               name: sandbox-service
+              port:
+                number: 80
+  - http:
+        paths:
+        - pathType: Prefix
+          path: "/api/ai"
+          backend:
+            service:
+              name: ai-service
               port:
                 number: 80
 

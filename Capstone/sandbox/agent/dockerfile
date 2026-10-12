@@ -1,4 +1,14 @@
-FROM node:24-alpine
+FROM node:24-bullseye
+
+# Install  build dependencies for native modules (node-pty)
+# 'make' , "g++" and "python3" are required for node-gyp to compile c++ code
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       bash \
+       python3 \
+       make \
+       g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

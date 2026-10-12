@@ -2,14 +2,70 @@ import express from 'express';
 import morgan from 'morgan';
 import fs from 'fs';
 import path from 'path';
+import cors from 'cors';
+import { Server } from 'socket.io';
+import http from 'http';
+import pty from 'node-pty';
+import os from 'os';
 
 const WORKING_DIR = '/workspace';
 
 const app = express();
+const httpServer = http.createServer(app);
+const io = new Server(httpServer,{
+    cors:{
+        origin: '*',
+        methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    }
+});
 
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+const shell = process.env.SHELL || 'bash';
+
+// spawn the PTY process with the specified shell and working directory. The PTY process allows us to run shell commands in a pseudo-terminal, which is useful for executing commands that require a terminal interface.
+const ptyProcess = pty.spawn(shell, [], {
+    name: 'xterm-color',
+    cols: 80,
+    rows: 30,
+    cwd: "/workspace",
+    env: process.env,
+});
+
+// Handle data coming from the PTY process and send it to the client via WebSocket. This allows the client to see the output of the commands executed in the PTY process in real-time.
+ptyProcess.onData((data)=>{
+    io.emit('terminal-output', data);
+});
+
+
+//Handle process exit event and log the exit code. This is useful for debugging and understanding why the PTY process terminated.
+ptyProcess.onExit(({exitCode, signal})=>{
+    console.log(`Process exited with code: ${exitCode}, signal: ${signal}`);
+});
+
+
+io.on('connection', (socket) => {
+    console.log('A user connected' + socket.id);
+
+    socket.on('terminal-input', (data) => {
+        // Write the data received from the client to the PTY process. This allows the client to send commands to be executed in the PTY process.
+        ptyProcess.write(data);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected' + socket.id);
+    });
+});
+
+
+
 
 app.get('/', (req, res) => {
     res.status(200).json({
@@ -17,6 +73,7 @@ app.get('/', (req, res) => {
         status: 'success',
     });
 });
+
 /**
  * @route GET /list-files
  * @description Lists all files in the working directory and its subdirectories. Returns a JSON object with the file paths relative to the working directory. exclude directories like node_modules, .git,dist, etc.
@@ -195,4 +252,4 @@ app.post('/create-files', async (req, res) => {
     });
 });
 
-export default app;
+export default httpServer;

@@ -5,14 +5,15 @@ import { z } from 'zod';
 // when we work with langchain we can pass 2 parameters to our agent. First one should be a object containing the messages and the second one should be a config object. The config object can contain a context field. The context field can be used to pass additional information to the agent, such as the projectId. For example, if we want to pass the projectId to the agent, we can do it like this:
 export const listFiles = tool(
     async ({}, config) => {
-        console.log("===============================================================");
-        console.log('listFiles is called');
-        console.log("===============================================================");
+        // The writer function is used to write messages to the console. It is passed in the context object when invoking the agent. If it is not provided, we use a no-op function that does nothing.
+        const writer = config.context?.writer ?? (() => {});
+
+        writer("Listing files in project directory...\n")
+
+
         const response = await axios.get(`http://sandbox-service-${config.context.projectId}:3000/list-files`);
 
-        console.log("===============================================================");
-        console.log('listFiles is called', JSON.stringify(response.data));
-        console.log("===============================================================");
+        writer("Files listed successfully." + "Files: " + response.data.files.join(",") + "\n");
 
         return JSON.stringify(response.data.files);
     },
@@ -26,15 +27,14 @@ export const listFiles = tool(
 
 export const readFile = tool(
     async ({ files = [] }, config) => {
-        console.log("===============================================================");
-        console.log('readfile is called');
-        console.log("===============================================================");
+        const writer = config.context?.writer ?? (() => {});
+
+        writer("Reading file contents...\n");
 
         const response = await axios.get(`http://sandbox-service-${config.context.projectId}:3000/read-file?files=` + files.join(','));
 
-        console.log("===============================================================");
-        console.log('readfile is called', JSON.stringify(response.data));
-        console.log("===============================================================");
+        writer("File contents read successfully.\n");
+
 
         return JSON.stringify(response.data);
     },
@@ -49,9 +49,9 @@ export const readFile = tool(
 
 export const updateFiles = tool(
     async ({ files }, config) => {
-        console.log("===============================================================");
-        console.log('updateFiles is called');
-        console.log("===============================================================");
+        const writer = config.context?.writer ?? (() => {});
+
+        writer("Updating file contents...\n");
 
         const response = await axios.patch(
             `http://sandbox-service-${config.context.projectId}:3000/update-files`,
@@ -60,9 +60,7 @@ export const updateFiles = tool(
             }
         );
 
-        console.log("===============================================================");
-        console.log('updatefile is called', JSON.stringify(response.data.results));
-        console.log("===============================================================");
+        writer("File contents updated successfully.\n");
 
         return JSON.stringify(response.data.results);
     },

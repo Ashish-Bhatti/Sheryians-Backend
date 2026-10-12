@@ -14,9 +14,20 @@ const response = await agent.invoke(
 )
 */
 agentRouter.post('/invoke', async (req, res) => {
+    const { message, projectId } = req.body;
+
+    // this is SSE (Server Sent Events) endpoint, so we need to set the appropriate headers. It is used to send a stream of events from the server to the client. The client can listen to these events and update the UI accordingly. It is useful for long-running tasks, such as invoking an agent that may take some time to complete.
+    // it is already built in express, so we just need to set the headers and then use res.write to send the events. The client can listen to these events using the EventSource API.
+    res.writeHead(200, {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
+    });
+
+    const writer = (text) => res.write(text);
+
     try {
-        const { message, projectId } = req.body;
-        const response = await agent.invoke(
+        const response = await agent.stream(
             {
                 messages: [
                     {
@@ -26,14 +37,29 @@ agentRouter.post('/invoke', async (req, res) => {
                 ],
             },
             {
-                context : {
-                    projectId
-                }
+                context: {
+                    projectId,
+                    writer,
+                },
+                streamMode: 'values',
             }
         );
-        res.status(200).json(response);
+
+        for await (const chunk of response) {
+            console.log(chunk);
+            // send the chunk to the client as an SSE event. The client can listen to these events using the EventSource API.
+            res.write(`data: ${JSON.stringify(chunk)}\n\n`);
+        }
+        res.write('data: [DONE]\n\n');
+        res.end();
     } catch (error) {
         console.error('Error occurred while invoking agent:', error);
+        if (res.headersSent) {
+            // SSE response has already started; don't send JSON.
+            res.end();
+            return;
+        }
+
         res.status(500).json({ error: 'Internal server error' });
     }
 });

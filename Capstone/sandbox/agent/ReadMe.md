@@ -5,3 +5,5 @@
 - install the node-pty package inside the sandbox/agents
 npm install node-pty
 - install socket.io so we can interact with node-pty through our terminal
+
+# we will use xterm js in frontend to create a terminal 

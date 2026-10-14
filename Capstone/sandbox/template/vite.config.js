@@ -9,10 +9,11 @@ export default defineConfig({
         port: 5173,
         allowedHosts: true,
         // vite create outer traffic (from router) and service treated differently and that's why we use this to allow the traffic from the router server
-    },
-    watch: {
-        usePolling: true,
-        interval: 300,
-        ignored: ['node_modules'],
+        hmr: { clientPort: 80, protocol: 'ws' },
+        watch: {
+            usePolling: true,
+            interval: 300,
+            ignored: ['node_modules'],
+        },
     },
 });

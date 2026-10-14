@@ -5,7 +5,8 @@ export async function createPod(sandboxId) {
         metadata: {
             name: `sandbox-pod-${sandboxId}`,
             labels: {
-                app : 'sandbox',
+                // app : 'sandbox', - this is not needed as we are using the sandboxId as the label to identify the pod
+                // and we have a same label for our main sandbox and that why it is causing the issue of multiple pods being created for the same sandboxId
                 sandboxId: sandboxId,
             },
         },

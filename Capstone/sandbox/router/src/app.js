@@ -49,6 +49,25 @@ function getAgentProxy(sandboxId) {
     return agentProxies[sandboxId];
 }
 
+export function handleUpgrade(req, socket, head) {
+    const host = req.headers.host;
+    const hostParts = host?.split('.');
+    const sandboxId = hostParts?.[0];
+    const hostType = hostParts?.[1];
+    const proxy = hostType === 'agent'
+        ? getAgentProxy(sandboxId)
+        : hostType === 'preview'
+            ? getProxy(sandboxId)
+            : null;
+
+    if (!proxy) {
+        socket.destroy();
+        return;
+    }
+
+    proxy.upgrade(req, socket, head);
+}
+
 app.use((req, res, next) => {
     console.log('SANDBOX SERVICE HOST:', req.headers.host);
 

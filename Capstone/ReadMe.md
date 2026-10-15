@@ -61,6 +61,7 @@ to bypass the cors error and to send traffic from router to pods
 - 1st container/template/vite-dev-server is only for preview url
 - 2nd container/agent/express server will give us api - read/list/update/create file so we can can change /workspace folder content
 - Once this pod is closed everything will be deleted for now
+- The sandbox start endpoint waits for both the preview and agent containers to pass their HTTP readiness probes before returning the sandbox URLs.
 - we will add a volume inside /sandbox/server/kubernetes/pods.js as /workspace_volume so both of those container can access it and we can sync them and there will /workspace folder in both agent and vite-dev-server container
 - after doing step 5 our router server now handle both type of api
   pod1.preview.localhost
@@ -93,7 +94,7 @@ setps :-
         ignored: ['node_modules'],
     },
 
-When the AI agent makes rapid code changes, Vite will check for file changes every 300ms instead of reacting to every change immediately. This helps prevent the preview window from flickering/blinking due to rapid successive updates.
+Polling checks mounted workspace files every 300ms. `awaitWriteFinish` waits until a file has stopped changing for 500ms before Vite processes it, avoiding HMR updates from partially written files.
 
 
 # Install nginx ingress controller
@@ -122,7 +123,7 @@ maintaining readme file
 2. kubectl create secret generic ai-secret --from-literal=GROQ_API_KEY=adjkflkasjdlkfjsshkasdhlfkl
 3. skaffold dev
 
-# if you are using ollama with docker and kubernetes 
+# if you are using ollama with docker and kubernetes
 1. $env:OLLAMA_HOST="0.0.0.0:11434"
 2. ollama serve
 3. and chande baseURL frrom the MODEL config file - baseUrl: "http://host.docker.internal:11434",

@@ -1,12 +1,49 @@
 import { k8sCoreV1Api } from './config.js';
 
+const NAMESPACE = 'default';
+const POD_READY_TIMEOUT_MS = 180_000;
+const POD_READY_POLL_INTERVAL_MS = 2_000;
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+export async function waitForPodReady(sandboxId) {
+    const podName = `sandbox-pod-${sandboxId}`;
+    const deadline = Date.now() + POD_READY_TIMEOUT_MS;
+
+    while (Date.now() < deadline) {
+        const pod = await k8sCoreV1Api.readNamespacedPod({
+            name: podName,
+            namespace: NAMESPACE,
+        });
+        const ready = pod.status?.conditions?.some(
+            (condition) => condition.type === 'Ready' && condition.status === 'True',
+        );
+
+        if (ready) {
+            return;
+        }
+
+        if (pod.status?.phase === 'Failed') {
+            const reason = pod.status.message || pod.status.reason || 'Pod entered Failed state';
+            const error = new Error(`Sandbox failed to start: ${reason}`);
+            error.statusCode = 500;
+            throw error;
+        }
+
+        await wait(POD_READY_POLL_INTERVAL_MS);
+    }
+
+    const error = new Error('Sandbox is taking too long to start. Please try again.');
+    error.statusCode = 504;
+    throw error;
+}
+
 export async function createPod(sandboxId) {
     const podManifest = {
         metadata: {
             name: `sandbox-pod-${sandboxId}`,
             labels: {
-                // app : 'sandbox', - this is not needed as we are using the sandboxId as the label to identify the pod
-                // and we have a same label for our main sandbox and that why it is causing the issue of multiple pods being created for the same sandboxId
+                app: 'sandbox',
                 sandboxId: sandboxId,
             },
         },
@@ -39,6 +76,12 @@ export async function createPod(sandboxId) {
                     imagePullPolicy: 'IfNotPresent',
                     name: 'sandbox-container',
                     ports: [{ containerPort: 5173, name: 'http' }],
+                    readinessProbe: {
+                        httpGet: { path: '/', port: 5173 },
+                        periodSeconds: 2,
+                        timeoutSeconds: 2,
+                        failureThreshold: 60,
+                    },
                     resources: {
                         limits: {
                             cpu: '500m',
@@ -66,6 +109,12 @@ export async function createPod(sandboxId) {
                     imagePullPolicy: 'IfNotPresent',
                     name: 'agent-container',
                     ports: [{ containerPort: 3000, name: 'http' }],
+                    readinessProbe: {
+                        httpGet: { path: '/', port: 3000 },
+                        periodSeconds: 2,
+                        timeoutSeconds: 2,
+                        failureThreshold: 60,
+                    },
                     resources: {
                         limits: {
                             cpu: '500m',
@@ -96,4 +145,3 @@ export async function createPod(sandboxId) {
     });
     return response;
 }
-

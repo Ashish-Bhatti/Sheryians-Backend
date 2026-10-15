@@ -13,6 +13,10 @@ export default defineConfig({
         watch: {
             usePolling: true,
             interval: 300,
+            awaitWriteFinish: {
+                stabilityThreshold: 500,
+                pollInterval: 100,
+            },
             ignored: ['node_modules'],
         },
     },

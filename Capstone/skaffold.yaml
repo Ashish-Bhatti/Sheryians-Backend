@@ -69,12 +69,23 @@ build:
             dest: /workspace
           - src: '**/*.json'
             dest: /workspace
-
+    - image: auth
+      context: auth
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual:             # paths are relative to ./core context
+          - src: '**/*.js'     # NOT 'core/**/*.js' ← that would fail
+            dest: /app
+          - src: '**/*.json'
+            dest: /app
 # ── Manifests ──────────────────────────────────────
 manifests:
   rawYaml:
     - k8s/ai-deployment.yml
     - k8s/ai-service.yml
+    - k8s/auth-deployment.yml
+    - k8s/auth-service.yml
     - k8s/router-deployment.yml
     - k8s/router-service.yml
     - k8s/sandbox-deployment.yml
@@ -94,5 +105,9 @@ portForward:
     localPort: 3000
   - resourceType: service
     resourceName: sandbox-service
+    port: 80
+    localPort: 3000
+  - resourceType: service
+    resourceName: auth-service
     port: 80
     localPort: 3000

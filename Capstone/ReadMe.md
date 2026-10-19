@@ -127,3 +127,11 @@ maintaining readme file
 1. $env:OLLAMA_HOST="0.0.0.0:11434"
 2. ollama serve
 3. and chande baseURL frrom the MODEL config file - baseUrl: "http://host.docker.internal:11434",
+
+=> day 4
+- Created an Auth microservice using Express.
+- Added Google OAuth sign-in with Passport and routes at `/api/auth/google` and `/api/auth/google/callback`.
+- Connected the service to MongoDB and added a user model to store Google account details.
+- On successful sign-in, the service creates a JWT that expires after one hour and sets it in an HTTP-only cookie.
+- Added health and readiness endpoints for Kubernetes probes.
+- Added Kubernetes Deployment and ClusterIP Service manifests for the Auth service, with database, Google OAuth, and JWT secrets supplied as environment variables.

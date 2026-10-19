@@ -29,7 +29,7 @@ function getProxy(sandboxId) {
         proxies[sandboxId] = createProxyMiddleware({
             target,
             changeOrigin: true,
-            ws: true,
+            // ws: true, // cause double upgrade handler -> corrupted ws frames
         });
     }
     return proxies[sandboxId];
@@ -43,7 +43,7 @@ function getAgentProxy(sandboxId) {
         agentProxies[sandboxId] = createProxyMiddleware({
             target,
             changeOrigin: true,
-            ws: true,
+            // ws: true, // cause double upgrade handler -> corrupted ws frames
         });
     }
     return agentProxies[sandboxId];

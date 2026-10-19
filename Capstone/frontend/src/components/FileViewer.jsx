@@ -23,7 +23,7 @@ export default function FileViewer({ agentBase, filePath }) {
       setError(null)
       setContent(null)
       try {
-        const res = await fetch(`${agentBase}/read-files?files=${encodeURIComponent(filePath)}`)
+        const res = await fetch(`${agentBase}/read-file?files=${encodeURIComponent(filePath)}`)
         const data = await res.json()
         const fileData = data.files?.[0]
         if (fileData) {

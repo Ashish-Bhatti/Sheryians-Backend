@@ -120,6 +120,8 @@ maintaining readme file
 
 # how to start all this with skaffold
 1. kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.1/deploy/static/provider/cloud/deploy.yaml
+
+--- if we are using secrets.yml we don't need to run below command
 2. kubectl create secret generic ai-secret --from-literal=GROQ_API_KEY=adjkflkasjdlkfjsshkasdhlfkl
 3. skaffold dev
 
@@ -135,3 +137,9 @@ maintaining readme file
 - On successful sign-in, the service creates a JWT that expires after one hour and sets it in an HTTP-only cookie.
 - Added health and readiness endpoints for Kubernetes probes.
 - Added Kubernetes Deployment and ClusterIP Service manifests for the Auth service, with database, Google OAuth, and JWT secrets supplied as environment variables.
+
+=> day 5
+- Added Redis support to the sandbox server and router.
+- When a sandbox starts, the server stores its active status in Redis with a 120-second expiry.
+- Subscribed to Redis key-expiration events so expired sandbox keys are reported in the server logs.
+- Configured the sandbox Deployment to read `REDIS_URL` from the Kubernetes `database` Secret.

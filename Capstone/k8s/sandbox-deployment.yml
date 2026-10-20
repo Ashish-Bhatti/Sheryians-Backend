@@ -26,6 +26,12 @@ spec:
           requests:
             cpu: "205m"
             memory: "200Mi"
+        env:
+          - name: REDIS_URL
+            valueFrom:
+              secretKeyRef:
+                name: database
+                key: REDIS_URL
         livenessProbe:
         # Checks if the application is still alive (not hung or deadlocked).
           httpGet:

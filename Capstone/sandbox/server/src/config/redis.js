@@ -1,4 +1,6 @@
 import Redis from 'ioredis';
+import {deletePod} from '../kubernetes/pod.js';
+import {deleteService} from '../kubernetes/service.js';
 
 export const redis = new Redis(process.env.REDIS_URL);
 
@@ -18,9 +20,19 @@ export async function createSandboxKey(sandboxId) {
 
 subscriber.config('SET', 'notify-keyspace-events', 'Ex');
 
-subscriber.subscribe('_keyevent@0__:expired');
+subscriber.subscribe('__keyevent@0__:expired')
 
-subscriber.on('message', (channel, key) => {
+subscriber.on('message', async (channel, key) => {
     console.log(`key expired: ${key}`);
+
+    /**
+     * sandbox:01a19cef-1659-7458-9803-e40afdd2279a
+     */
+
+    const sandboxId = key.split(':')[1];
+
+    // delete the pod and service when the key expires
+    await deletePod(sandboxId);
+    await deleteService(sandboxId);
 });
 

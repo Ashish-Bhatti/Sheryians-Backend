@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import { createProxyMiddleware } from 'http-proxy-middleware';
+import { refreshTTL } from '../config/redis.js';
 
 const app = express();
 app.use(morgan('combined'));
@@ -68,7 +69,7 @@ export function handleUpgrade(req, socket, head) {
     proxy.upgrade(req, socket, head);
 }
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     console.log('SANDBOX SERVICE HOST:', req.headers.host);
 
     const host = req.headers.host;
@@ -80,6 +81,8 @@ app.use((req, res, next) => {
     }
 
     const sandboxId = host.split('.')[0]; // extract sandboxId from subdomain
+
+    await refreshTTL(sandboxId); // refresh the TTL for the sandboxId in Redis
 
     /**
      * pod1.preview.localhost

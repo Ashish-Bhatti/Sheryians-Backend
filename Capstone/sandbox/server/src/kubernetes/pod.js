@@ -43,7 +43,7 @@ export async function createPod(sandboxId) {
         metadata: {
             name: `sandbox-pod-${sandboxId}`,
             labels: {
-                
+
                 sandboxId: sandboxId,
             },
         },
@@ -142,6 +142,16 @@ export async function createPod(sandboxId) {
     const response = await k8sCoreV1Api.createNamespacedPod({
         namespace: 'default',
         body: podManifest,
+    });
+    return response;
+}
+
+export async function deletePod(sandboxId) {
+    const response = await k8sCoreV1Api.deleteNamespacedPod({
+        name: `sandbox-pod-${sandboxId}`,
+        namespace: NAMESPACE,
+    },{
+        gracePeriodSeconds: 0, // force delete immediately
     });
     return response;
 }

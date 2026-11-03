@@ -143,3 +143,8 @@ maintaining readme file
 - When a sandbox starts, the server stores its active status in Redis with a 120-second expiry.
 - Subscribed to Redis key-expiration events so expired sandbox keys are reported in the server logs.
 - Configured the sandbox Deployment to read `REDIS_URL` from the Kubernetes `database` Secret.
+
+=> day 6
+- The router refreshes a sandbox's 120-second Redis expiry whenever it receives traffic for that sandbox.
+- When a sandbox key expires, the server deletes the matching Kubernetes pod and Service.
+- Configured the router Deployment to read `REDIS_URL` from the Kubernetes `database` Secret.

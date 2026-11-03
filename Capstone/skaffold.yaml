@@ -69,8 +69,20 @@ build:
             dest: /workspace
           - src: '**/*.json'
             dest: /workspace
+
     - image: auth
       context: auth
+      docker:
+        dockerfile: dockerfile
+      sync:
+        manual:             # paths are relative to ./core context
+          - src: '**/*.js'     # NOT 'core/**/*.js' ← that would fail
+            dest: /app
+          - src: '**/*.json'
+            dest: /app
+
+    - image: notification
+      context: notification
       docker:
         dockerfile: dockerfile
       sync:
@@ -92,6 +104,8 @@ manifests:
     - k8s/sandbox-service.yml
     - k8s/rbac.yml
     - k8s/ingress.yml
+    - k8s/notification-deployment.yml
+    - k8s/notification-service.yml
 
 # ── Port Forwarding ────────────────────────────────
 portForward:

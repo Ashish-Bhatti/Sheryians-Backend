@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import User from '../models/user.model.js';
 import passport from 'passport';
+import {sendAuthNotification} from '../config/mq.js'
+import jwt from 'jsonwebtoken';
 
 const authRouter = Router();
 
@@ -12,6 +14,8 @@ authRouter.get('/google/callback', passport.authenticate('google', { session: fa
     try {
         const { id, displayName, emails, photos } = req.user;
         let user = await User.findOne({ googleId: id });
+
+
         if (!user) {
             user = new User({
                 googleId: id,
@@ -21,6 +25,13 @@ authRouter.get('/google/callback', passport.authenticate('google', { session: fa
             });
             await user.save();
         }
+
+          await sendAuthNotification({
+            userId: user._id,
+            action: 'google_login',
+            timestamp: new Date().toISOString(),
+            email: emails[0].value,
+        }); // Send notification to RabbitMQ queue
 
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
